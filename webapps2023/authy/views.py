@@ -54,6 +54,7 @@ def login_user(request):
         data['error_msg'] = "Something went wrong {}".format(str(e))
         return render(request, "auth/login.html", data)
 
+
 @login_required
 def change_password(request):
     data = {}
@@ -67,21 +68,21 @@ def change_password(request):
             data['error'] = True
             data['error_msg'] = "The old password you entered is incorrect."
             messages.error(request, 'The old password you entered is incorrect.')
-            return redirect('change_password')
+            return redirect('/app/settings')
 
         if len(new_password) < 8:
             data['error'] = True
             data['error_msg'] = "The new password must be at least 8 characters long."
             messages.error(request, 'The new password must be at least 8 characters long.')
-            return redirect('change_password')
+            return redirect('/app/settings')
 
         user.set_password(new_password)
         user.save()
 
         messages.success(request, 'Your password has been updated.')
-        return redirect('home')
+        return redirect('/auth/login')
 
-    return render(request, "app/settings.html")
+    return render(request, "payapp/settings.html")
 
 
 def logout_user(request):
