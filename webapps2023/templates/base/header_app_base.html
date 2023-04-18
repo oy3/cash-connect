@@ -1,0 +1,89 @@
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a
+            class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 logo" href="{% url 'dashboard:dashboard_page' %}">
+        <h4 class="text-white mb-0">Ca$hConnect</h4>
+    </a>
+    <div>
+        <button class="btn d-none d-md-block dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                data-bs-display="static" aria-expanded="false">
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em"
+                 height="1em" viewBox="0 0 20 20" fill="none" class="fs-5 text-white">
+                <path
+                        d="M10 2C6.68632 2 4.00003 4.68629 4.00003 8V11.5858L3.29292 12.2929C3.00692 12.5789 2.92137 13.009 3.07615 13.3827C3.23093 13.7564 3.59557 14 4.00003 14H16C16.4045 14 16.7691 13.7564 16.9239 13.3827C17.0787 13.009 16.9931 12.5789 16.7071 12.2929L16 11.5858V8C16 4.68629 13.3137 2 10 2Z"
+                        fill="currentColor"></path>
+                <path d="M10 18C8.34315 18 7 16.6569 7 15H13C13 16.6569 11.6569 18 10 18Z" fill="currentColor">
+                </path>
+            </svg>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end bg-light shadow-lg" style="width: 300px;">
+            <div class="d-flex justify-content-between mx-3 mb-3">
+                <span class="text-muted">Notifications</span>
+                <!--           <a href="#" class="small text-decoration-none">View more</a> -->
+            </div>
+            <li>
+                <a class="dropdown-item py-0" href="#">
+                    <div class="d-flex align-items-center">
+                        <span class="me-2 text-danger">●</span>
+                        <div class="d-grid">
+                            <span class="text-wrap">Recieved payment of <b>£50.70</b> from <b>Elia277</b></span>
+                            <span class="text-muted small">09:20AM</span>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+            <li>
+                <a class="dropdown-item py-0" href="#">
+                    <div class="d-flex align-items-center">
+                        <span class="me-2 text-danger">●</span>
+                        <div class="d-grid">
+                            <span class="text-wrap">Sent payment of <b>£400.00</b> to <b>Ojo123</b></span>
+                            <span class="text-muted small">07:00AM</span>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+            <li>
+                <a class="dropdown-item py-0" href="#">
+                    <div class="d-flex align-items-center">
+                        <span class="me-2 text-danger">●</span>
+                        <div class="d-grid">
+                            <span class="text-wrap">Recieved payment of <b>£250.00</b> from <b>Lipe419</b></span>
+                            <span class="text-muted small">02:30AM</span>
+                        </div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <ul class="dropdown-menu dropdown-menu-end" style="width: 300px !important;">
+        <li><a class="dropdown-item py-0" href="#">
+            <div class="d-flex align-items-center"><span class="me-2 text-danger">●</span>
+                <div class="d-grid"><span class="text-wrap">Recieved payment of £50.70 from Elia277</span><span
+                        class="small text-black-50">09:20AM</span></div>
+            </div>
+        </a></li>
+        <li></li>
+        <li><a class="dropdown-item py-0" href="#">
+            <div class="d-flex align-items-center"><span class="me-2 text-danger">●</span>
+                <div class="d-grid"><span class="text-wrap">Recieved payment of £50.70 from Elia277</span><span
+                        class="small text-black-50">09:20AM</span></div>
+            </div>
+        </a></li>
+        <li></li>
+        <li><a class="dropdown-item py-0" href="#">
+            <div class="d-flex align-items-center"><span class="me-2 text-danger">●</span>
+                <div class="d-grid"><span class="text-wrap">Recieved payment of £50.70 from Elia277</span><span
+                        class="small text-black-50">09:20AM</span></div>
+            </div>
+        </a></li>
+    </ul>
+    <button class="btn navbar-toggler position-absolute d-md-none collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
+            aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+</header>

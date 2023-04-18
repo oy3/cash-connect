@@ -1,0 +1,237 @@
+{% extends "base/base.html" %}
+{% load static %}
+{%  block content %}
+
+{% include 'base/header_app_base.html' %}
+
+<div class="container-fluid">
+    <div class="row">
+        {% include 'base/sidebar_base.html' %}
+
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-5">
+            <div
+                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h3>Dashboard</h3>
+            </div>
+            <div class="row justify-content-between">
+                <div class="col-lg-5">
+                    <div class="text-white" style="background-color: lightsteelblue;">
+                        <div class="p-3">
+                            <p class="fw-lighter" style="font-size: 12px;">Balance</p>
+                            <h2 class="fw-bold">GBP 1,100.00</h2>
+                            <span class="fw-lighter" style="font-size: 12px;">Account holder</span>
+                            <p class="fs-5 fw-normal">{{ auth_user.first_name }} {{ auth_user.last_name}}<span
+                                    class="bg-white p-1 rounded text-secondary ms-2 border-secondary border"
+                                    style="font-size: 12px;">{{ auth_user.username }}</span></p>
+                            <span class="fw-lighter" style="font-size: 12px;">Available</span>
+                            <p class="fs-5 fw-bold">GBP 1,000.00</p>
+                            <hr>
+                            <div class="table-responsive text-center">
+                                <table class="table table-borderless">
+                                    <thead>
+                                    <tr>
+                                        <th class="fw-light small w-50 border-end pb-0">
+                                            <svg
+                                                    xmlns="http://www.w3.org/2000/svg" viewBox="-96 0 512 512"
+                                                    width="1em" height="1em" fill="currentColor"
+                                                    class="text-success me-2">
+                                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                                <path
+                                                        d="M9.39 265.4l127.1-128C143.6 131.1 151.8 128 160 128s16.38 3.125 22.63 9.375l127.1 128c9.156 9.156 11.9 22.91 6.943 34.88S300.9 320 287.1 320H32.01c-12.94 0-24.62-7.781-29.58-19.75S.2333 274.5 9.39 265.4z">
+                                                </path>
+                                            </svg>
+                                            Income
+                                        </th>
+                                        <th class="fw-light small w-50 pb-0">
+                                            <svg
+                                                    xmlns="http://www.w3.org/2000/svg" viewBox="-96 0 512 512"
+                                                    width="1em" height="1em" fill="currentColor"
+                                                    class="text-danger me-2">
+                                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                                <path
+                                                        d="M310.6 246.6l-127.1 128C176.4 380.9 168.2 384 160 384s-16.38-3.125-22.63-9.375l-127.1-128C.2244 237.5-2.516 223.7 2.438 211.8S19.07 192 32 192h255.1c12.94 0 24.62 7.781 29.58 19.75S319.8 237.5 310.6 246.6z">
+                                                </path>
+                                            </svg>
+                                            Expenses
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td class="border-end fw-bold pt-0">GBP 2,110.00</td>
+                                        <td class="fw-bold pt-0">GBP 5.30</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-5 bg-light p-3 border">
+                        <canvas
+                                data-bss-chart="{&quot;type&quot;:&quot;line&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Jan&quot;,&quot;Feb&quot;,&quot;Mar&quot;,&quot;Apr&quot;,&quot;May&quot;,&quot;Jun&quot;,&quot;Jul&quot;,&quot;Aug&quot;,&quot;Sep&quot;,&quot;Oct&quot;,&quot;Nov&quot;,&quot;Dec&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;In&quot;,&quot;backgroundColor&quot;:&quot;#60c659&quot;,&quot;borderColor&quot;:&quot;#339e35&quot;,&quot;data&quot;:[&quot;4500&quot;,&quot;5300&quot;,&quot;6250&quot;,&quot;7800&quot;,&quot;9800&quot;,&quot;15000&quot;,&quot;3500&quot;,&quot;7000&quot;,&quot;4500&quot;,&quot;13500&quot;,&quot;15000&quot;,&quot;15000&quot;],&quot;fill&quot;:true},{&quot;label&quot;:&quot;Out&quot;,&quot;fill&quot;:true,&quot;data&quot;:[&quot;5600&quot;,&quot;5000&quot;,&quot;8000&quot;,&quot;7300&quot;,&quot;9800&quot;,&quot;15000&quot;,&quot;10000&quot;,&quot;10000&quot;,&quot;10000&quot;,&quot;13000&quot;,&quot;13000&quot;,&quot;14500&quot;],&quot;backgroundColor&quot;:&quot;rgb(214,40,40)&quot;,&quot;borderColor&quot;:&quot;#a03033&quot;}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:true,&quot;legend&quot;:{&quot;display&quot;:true,&quot;labels&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;},&quot;position&quot;:&quot;top&quot;,&quot;reverse&quot;:false},&quot;title&quot;:{&quot;fontStyle&quot;:&quot;bold&quot;,&quot;display&quot;:false},&quot;scales&quot;:{&quot;xAxes&quot;:[{&quot;gridLines&quot;:{&quot;drawBorder&quot;:true,&quot;drawTicks&quot;:true,&quot;drawOnChartArea&quot;:true},&quot;ticks&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;,&quot;beginAtZero&quot;:false}}],&quot;yAxes&quot;:[{&quot;gridLines&quot;:{&quot;drawBorder&quot;:true,&quot;drawTicks&quot;:true,&quot;drawOnChartArea&quot;:true},&quot;ticks&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;,&quot;beginAtZero&quot;:false}}]}}}"></canvas>
+                    </div>
+                </div>
+                <div class="col-lg-6 mt-5 mt-lg-0">
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-3"><span
+                                class="fs-5 fw-bold ms-3">Transactions</span>
+                            <a class="text-decoration-none" href="{% url 'dashboard:transactions_page' %}">
+                                <span class="text-black-50 small">View all</span>
+                            </a>
+                        </div>
+                        <div class="tab-content ms-0 ms-sm-3">
+                            <div class="table-responsive">
+                                <table class="table table-hover remove-table-hover">
+                                    <tbody>
+                                    <tr>
+                                        <td class="border-bottom-0 m-0" style="box-shadow: none;"><span
+                                                class="text-muted small">Pendng</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex justify-content-between">
+                                                <div class="d-flex align-items-center">
+                                                    <svg
+                                                            xmlns="http://www.w3.org/2000/svg" width="1em"
+                                                            height="1em" viewBox="0 0 20 20" fill="none"
+                                                            class="text-success fs-1 me-3">
+
+                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                              d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 7C11 6.44772 10.5523 6 10 6C9.44772 6 9 6.44772 9 7V9H7C6.44772 9 6 9.44771 6 10C6 10.5523 6.44772 11 7 11H9V13C9 13.5523 9.44772 14 10 14C10.5523 14 11 13.5523 11 13V11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H11V7Z"
+                                                              fill="currentColor"></path>
+                                                    </svg>
+                                                    <div class="d-grid"><span class="fw-bold">From Ogun
+                                                                    b</span><span class="text-black-50">19:30</span>
+                                                    </div>
+                                                </div>
+                                                <span class="fw-bold text-success float-end">+£
+                                                            100.00</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border-bottom-0 m-0 d-flex justify-content-between"
+                                            style="box-shadow: none;"><span
+                                                class="text-muted small">Today</span><span
+                                                class="text-muted small">£ 15.30</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex justify-content-between">
+                                                <div class="d-flex align-items-center">
+                                                    <svg
+                                                            xmlns="http://www.w3.org/2000/svg" width="1em"
+                                                            height="1em" viewBox="0 0 20 20" fill="none"
+                                                            class="text-success fs-1 me-3">
+
+                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                              d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 7C11 6.44772 10.5523 6 10 6C9.44772 6 9 6.44772 9 7V9H7C6.44772 9 6 9.44771 6 10C6 10.5523 6.44772 11 7 11H9V13C9 13.5523 9.44772 14 10 14C10.5523 14 11 13.5523 11 13V11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H11V7Z"
+                                                              fill="currentColor"></path>
+                                                    </svg>
+                                                    <div class="d-grid"><span class="fw-bold">From Raheem
+                                                                    Momoh</span><span class="text-black-50">15:00</span>
+                                                    </div>
+                                                </div>
+                                                <span class="fw-bold text-success float-end">+£
+                                                            10.00</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex justify-content-between">
+                                                <div class="d-flex align-items-center">
+                                                    <svg
+                                                            xmlns="http://www.w3.org/2000/svg" width="1em"
+                                                            height="1em" viewBox="0 0 20 20" fill="none"
+                                                            class="text-danger fs-1 me-3">
+
+                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                              d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM7 9C6.44772 9 6 9.44772 6 10C6 10.5523 6.44772 11 7 11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H7Z"
+                                                              fill="currentColor"></path>
+                                                    </svg>
+                                                    <div class="d-grid"><span class="fw-bold">To Zain
+                                                                    Doe</span><span class="text-black-50">13:52</span>
+                                                    </div>
+                                                </div>
+                                                <span class="fw-bold text-danger float-end">-£ 5.30</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex justify-content-between">
+                                                <div class="d-flex align-items-center">
+                                                    <svg
+                                                            xmlns="http://www.w3.org/2000/svg" width="1em"
+                                                            height="1em" viewBox="0 0 20 20" fill="none"
+                                                            class="text-danger fs-1 me-3">
+
+                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                              d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM7 9C6.44772 9 6 9.44772 6 10C6 10.5523 6.44772 11 7 11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H7Z"
+                                                              fill="currentColor"></path>
+                                                    </svg>
+                                                    <div class="d-grid"><span class="fw-bold">To Lipe
+                                                                    Emma</span><span class="text-black-50">13:20</span>
+                                                    </div>
+                                                </div>
+                                                <span class="fw-bold text-danger float-end">-£ 1.00</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <div class="bg-dark text-white w-100 py-5 px-3 px-sm-0">
+                            <h5 class="ps-3">Recent beneficiaries</h5>
+                            <div class="d-flex justify-content-evenly mt-4 w-100">
+                                <div class="text-center">
+                                    <div class="d-flex justify-content-center"><span
+                                            class="beneficiaries-icon bg-white rounded-circle d-flex align-items-center justify-content-center"><i
+                                            class="icon-user fs-2 text-dark"></i></span></div>
+                                    <span
+                                            class="small text-break">Zain Doe</span>
+                                </div>
+                                <div class="text-center">
+                                    <div class="d-flex justify-content-center"><span
+                                            class="beneficiaries-icon bg-white rounded-circle d-flex align-items-center justify-content-center"><i
+                                            class="icon-user fs-2 text-dark"></i></span></div>
+                                    <span
+                                            class="small">Lipe Emma</span>
+                                </div>
+                                <div class="text-center">
+                                    <div class="d-flex justify-content-center"><span
+                                            class="beneficiaries-icon bg-white rounded-circle d-flex align-items-center justify-content-center"><i
+                                            class="icon-user fs-2 text-dark"></i></span></div>
+                                    <span
+                                            class="small">Ogun B</span>
+                                </div>
+                                <div class="text-center">
+                                    <div class="d-flex justify-content-center"><span
+                                            class="beneficiaries-icon bg-white rounded-circle d-flex align-items-center justify-content-center"><i
+                                            class="icon-user-female fs-2 text-dark"></i></span></div>
+                                    <span
+                                            class="small">Elia Haddou</span>
+                                </div>
+                                <div class="text-center">
+                                    <div class="d-flex justify-content-center"><span
+                                            class="beneficiaries-icon bg-white rounded-circle d-flex align-items-center justify-content-center"><i
+                                            class="icon-user fs-2 text-dark"></i></span></div>
+                                    <span
+                                            class="small">Sam Reid</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+    </div>
+</div>
+
+{%  endblock  %}

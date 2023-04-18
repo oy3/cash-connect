@@ -1,0 +1,27 @@
+.logo {
+  color: #2FCD29;
+  font-family: 'Bungee';
+}
+
+.primary-bg {
+  background-color: #2fcd29;
+}
+
+.secondary-bg {
+  background-color: #9effa0;
+}
+
+.primary-text {
+  color: #2fcd29;
+}
+
+.secondary-text {
+  color: #9effa0;
+}
+
+/* Home */
+
+.cover-container {
+  max-width: 50em;
+}
+

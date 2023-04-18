@@ -1,0 +1,315 @@
+{% extends "base/base.html" %}
+{% load static %}
+{%  block content %}
+
+{% include 'base/header_app_base.html' %}
+
+<div class="container-fluid">
+    <div class="row">
+        {% include 'base/sidebar_base.html' %}
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div
+                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h3>Account Settings</h3>
+            </div>
+            <div class="col-md-12 col-lg-8 col-xl-7">
+                <ul id="pills-tab" class="nav nav-pills mb-3" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button id="pills-info-tab" class="nav-link active"
+                                type="button" data-bs-toggle="pill" data-bs-target="#pills-info" role="tab"
+                                aria-controls="pills-info" aria-selected="true">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 width="1em" height="1em" viewBox="0 0 20 20" fill="none" class="me-2">
+
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                      d="M10 9C11.6569 9 13 7.65685 13 6C13 4.34315 11.6569 3 10 3C8.34315 3 7 4.34315 7 6C7 7.65685 8.34315 9 10 9ZM3 18C3 14.134 6.13401 11 10 11C13.866 11 17 14.134 17 18H3Z"
+                                      fill="currentColor"></path>
+                            </svg>
+                            Personal Info
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button id="pills-pwd-tab" class="nav-link"
+                                type="button" data-bs-toggle="pill" data-bs-target="#pills-pwd" role="tab"
+                                aria-controls="pills-pwd" aria-selected="false">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 width="1em" height="1em" viewBox="0 0 20 20" fill="none" class="me-2">
+
+                                <path
+                                        d="M10 2C7.23858 2 5 4.23858 5 7V9C3.89543 9 3 9.89543 3 11V16C3 17.1046 3.89543 18 5 18H15C16.1046 18 17 17.1046 17 16V11C17 9.89543 16.1046 9 15 9H7V7C7 5.34315 8.34315 4 10 4C11.3965 4 12.5725 4.95512 12.9055 6.24926C13.0432 6.78411 13.5884 7.1061 14.1232 6.96844C14.6581 6.83078 14.9801 6.28559 14.8424 5.75074C14.2874 3.59442 12.3312 2 10 2Z"
+                                        fill="currentColor"></path>
+                            </svg>
+                            Password and security
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button id="pills-gen-tab" class="nav-link"
+                                type="button" data-bs-toggle="pill" data-bs-target="#pills-gen" role="tab"
+                                aria-controls="pills-gen" aria-selected="false">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 width="1em" height="1em" viewBox="0 0 24 24" fill="none" class="me-2">
+                                <path
+                                        d="M21 12C21 16.9706 16.9706 21 12 21M21 12C21 7.02944 16.9706 3 12 3M21 12H3M12 21C7.02944 21 3 16.9706 3 12M12 21C13.6569 21 15 16.9706 15 12C15 7.02944 13.6569 3 12 3M12 21C10.3431 21 9 16.9706 9 12C9 7.02944 10.3431 3 12 3M3 12C3 7.02944 7.02944 3 12 3"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                            </svg>
+                            General
+                        </button>
+                    </li>
+                </ul>
+                <div id="pills-tabContent" class="tab-content ms-0 ms-sm-3 mb-3">
+                    <div id="pills-info" class="tab-pane fade show active" role="tabpanel"
+                         aria-labelledby="pills-info-tab" tabindex="0">
+                        <form>
+                            <div class="mb-3">
+                                <label class="form-label" for="firstNameInput">Username</label>
+                                <input
+                                        class="form-control" type="text" id="firstNameInput" readonly=""
+                                        value="{{ auth_user.username }}" disabled="">
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <label class="form-label" for="firstNameInput-1">First
+                                        name</label>
+                                    <input class="form-control text-capitalize" type="text" id="firstNameInput-1" value="{{ auth_user.first_name }}">
+                                </div>
+                                <div class="col">
+                                    <label class="form-label" for="lastNameInput-2">Last
+                                        name</label>
+                                    <input class="form-control text-capitalize" type="text" id="lastNameInput-2" value="{{ auth_user.last_name}}">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="emailInput">Email address</label>
+                                <input class="form-control text-lowercase" type="email" id="emailInput" value="{{ auth_user.email}}">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="phoneInput">Phone number</label>
+                                <input
+                                        class="form-control" type="tel" id="phoneInput">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="addressInput">Street
+                                    Address</label>
+                                <textarea class="form-control" id="addressInput"></textarea>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <label class="form-label" for="zipInput">ZIP code</label>
+                                    <input
+                                            class="form-control" type="text" id="zipInput">
+                                </div>
+                                <div class="col">
+                                    <label class="form-label" for="cityInput">City</label>
+                                    <input
+                                            class="form-control" type="text" id="cityInput"></div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <label class="form-label" for="stateInput">State</label>
+                                    <input
+                                            class="form-control" type="text" id="stateInput"></div>
+                                <div class="col">
+                                    <label class="form-label" for="countryInput">Country</label>
+                                    <input
+                                            class="form-control" type="text" id="countryInput">
+                                </div>
+                            </div>
+                            <button class="btn btn-dark form-control" type="submit">Save changes</button>
+                        </form>
+                    </div>
+                    <div id="pills-pwd" class="tab-pane fade" role="tabpanel" aria-labelledby="pills-pwd-tab"
+                         tabindex="0">
+                        <form method="post"  id="changePwdForm" action="{% url 'authy:change_password' %}">
+                            {% csrf_token %}
+                            <fieldset>
+                                <div class="mb-3">
+                                    <label class="form-label" for="oldPwdInput">Old password</label>
+                                    <div class="input-group mb-3">
+                                        <input class="form-control border-end-0 pwd"
+                                               type="password" id="oldPwdInput" name="oldPwdInput"
+                                               placeholder="Enter old password">
+                                        <span
+                                                class="input-group-text bg-white togglePassword">
+                                        <svg
+                                                xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                                fill="currentColor" viewBox="0 0 16 16" class="bi bi-eye showPwd"
+                                                style="cursor: pointer;">
+                                                    <path
+                                                            d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z">
+                                                    </path>
+                                                    <path
+                                                            d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z">
+                                                    </path>
+                                                </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                             fill="currentColor" viewBox="0 0 16 16"
+                                             class="bi bi-eye-slash d-none hidePwd" style="cursor: pointer;">
+                                                    <path
+                                                            d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.944 5.944 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z">
+                                                    </path>
+                                                    <path
+                                                            d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829z">
+                                                    </path>
+                                                    <path
+                                                            d="M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12-.708.708z">
+                                                    </path>
+                                                </svg>
+                                    </span>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="newPwdInput">New password</label>
+                                    <div class="input-group mb-3">
+                                        <input class="form-control border-end-0 pwd"
+                                               type="password" id="newPwdInput"
+                                               name="newPwdInput"
+                                               placeholder="Enter new password">
+                                        <span
+                                                class="input-group-text bg-white togglePassword">
+                                            <svg
+                                                    xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                                    fill="currentColor" viewBox="0 0 16 16" class="bi bi-eye showPwd"
+                                                    style="cursor: pointer;">
+                                                    <path
+                                                            d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z">
+                                                    </path>
+                                                    <path
+                                                            d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z">
+                                                    </path>
+                                                </svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                                 fill="currentColor" viewBox="0 0 16 16"
+                                                 class="bi bi-eye-slash d-none hidePwd" style="cursor: pointer;">
+                                                    <path
+                                                            d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.944 5.944 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z">
+                                                    </path>
+                                                    <path
+                                                            d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829z">
+                                                    </path>
+                                                    <path
+                                                            d="M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12-.708.708z">
+                                                    </path>
+                                                </svg>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="confirmPwdInput">Confirm new password</label>
+                                    <div class="input-group mb-3">
+                                        <input class="form-control border-end-0 pwd" type="password"
+                                               id="confirmPwdInput" name="confirmPwdInput"
+                                               placeholder="Confirm your password">
+                                        <span class="input-group-text bg-white togglePassword">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                                 fill="currentColor" viewBox="0 0 16 16" class="bi bi-eye showPwd"
+                                                 style="cursor: pointer;">
+                                                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z">
+                                                    </path>
+                                                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z">
+                                                    </path>
+                                                </svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                                 fill="currentColor" viewBox="0 0 16 16"
+                                                 class="bi bi-eye-slash d-none hidePwd" style="cursor: pointer;">
+                                                    <path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.944 5.944 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z">
+                                                    </path>
+                                                    <path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829z">
+                                                    </path>
+                                                    <path d="M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12-.708.708z">
+                                                    </path>
+                                                </svg>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div id="myAlert"
+                                     class="alert alert-danger alert-dismissible fade {% if error %}show {% else %}d-none{% endif %}"
+                                     role="alert">
+                                    {{ error_msg }}
+                                </div>
+                                <button class="btn btn-dark form-control" id="changePwdBtn" type="submit">Update password</button>
+                            </fieldset>
+                        </form>
+                    </div>
+                    <div id="pills-gen" class="tab-pane fade" role="tabpanel" aria-labelledby="pills-gen-tab"
+                         tabindex="0">
+                        <form>
+                            <div class="row mb-3">
+                                <label class="form-label col-sm-4 col-form-label" for="currency_from">Change
+                                    currency</label>
+                                <div class="col-sm-8">
+                                    <select class="form-select" id="currency_from">
+                                        <optgroup label="Select currency">
+                                            {% for currency in currencies %}
+                                            <option value="{{ currency.code}}" selected="">{{ currency.name }}</option>
+                                            {% endfor %}
+                                        </optgroup>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="form-label col-sm-4 col-form-label">Rates</label>
+                                <div class="col-sm-8">
+                                    <ul class="list-group" id="rateGroup"></ul>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+    </div>
+</div>
+
+<script src="{% static "js/passwordToggle.js" %}"></script>
+
+<script>
+    const rate_data = JSON.parse("{{ rate_data|escapejs }}");
+    const from = document.getElementById('currency_from').value;
+    const ulList = document.getElementById("rateGroup");
+    const static_url = "{{static_url}}"
+    let html = ""
+    ulList.innerHTML = html
+
+    for (let rate of rate_data) {
+        if (rate.from == from) {
+            html += `
+                <li class="list-group-item d-flex justify-content-between">
+                   <div class="d-flex align-items-center">
+                   <img class="rounded-circle me-2" src="${static_url}${rate.img_to}" height="30px" width="30px">
+                   <div class="d-grid">
+                        <span class="fw-bold">${rate.to}</span>
+                        <span class="text-black-50">${rate.to}</span></div>
+                    </div>
+                    <span class="float-end">${rate.rate}</span>
+                </li>
+            `
+        }
+    }
+    console.log(html);
+    ulList.innerHTML = html;
+</script>
+
+<script>
+    const updateBtn = document.getElementById('changePwdBtn');
+    updateBtn.addEventListener('click', function () {
+        hideError();
+        const oldPwd = document.getElementById('oldPwdInput').value;
+        const newPwd = document.getElementById('newPwdInput').value;
+        const confirmPwd = document.getElementById('confirmPwdInput').value;
+        const form = document.getElementById('changePwdForm');
+
+        //frontend validation
+        if (!oldPwd || !newPwd || !confirmPwd) {
+            showError('All fields are required!');
+        } else if (newPwd !== confirmPwd){
+            showError('Passwords do not match!');
+        } else {
+            form.submit();
+        }
+    }, false)
+</script>
+
+{%  endblock  %}

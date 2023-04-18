@@ -1,0 +1,119 @@
+{% extends "base/base.html" %}
+{% load static %}
+{%  block content %}
+
+{% include 'base/header_app_base.html' %}
+
+<div class="container-fluid">
+    <div class="row">
+        {% include 'base/sidebar_base.html' %}
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-5">
+            <div
+                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-5 border-bottom">
+                <h3>Transfer</h3>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-lg-5 col-xl-5 col-xxl-4">
+                    <h4 class="mb-4">Account Overview</h4>
+                    <div class="bg-dark text-white">
+                        <div class="p-3">
+                            <p class="fw-lighter" style="font-size: 12px;">Balance</p>
+                            <h2 class="fw-bold">GBP 1,000.00</h2>
+                            <hr><span class="fw-lighter" style="font-size: 12px;">Username</span>
+                            <p>{{ auth_user.username }}</p><span class="fw-lighter" style="font-size: 12px;">Account Name</span>
+                            <p>{{ auth_user.first_name }} {{ auth_user.last_name}}</p>
+                        </div><button class="btn btn-light form-control rounded-0 p-3 border-0 fw-bold" type="button"
+                                      style="background-color: #c6b5f2 !important;"><svg xmlns="http://www.w3.org/2000/svg" width="1em"
+                                                                                         height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-box-arrow-up-right fs-5 me-2">
+                        <path fill-rule="evenodd"
+                              d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z">
+                        </path>
+                        <path fill-rule="evenodd"
+                              d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z">
+                        </path>
+                    </svg>Share details</button><button class="btn btn-light form-control rounded-0 p-3 border-0 fw-bold"
+                                                        type="button" style="background-color: #fec0a7 !important;" data-bs-toggle="modal"
+                                                        data-bs-target="#requestModal"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                                                                            fill="currentColor" viewBox="0 0 16 16" class="bi bi-cash fs-5 me-2">
+                        <path d="M8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"></path>
+                        <path
+                                d="M0 4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V4zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V6a2 2 0 0 1-2-2H3z">
+                        </path>
+                    </svg>Request payment</button>
+                    </div>
+                </div>
+                <div
+                        class="col-md-12 col-lg-7 col-xl-7 col-xxl-7 my-sm-5 my-5 my-md-5 my-lg-0 px-3 px-sm-5 px-md-0 ps-lg-3 ps-xl-5">
+                    <h4 class="mb-4">Transfer to</h4>
+                    <form>
+                        <div class="mb-4"><label class="form-label">Beneficiary</label>
+                            <div class="input-group"><span class="bg-white input-group-text pe-none"><svg
+                                    xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none"
+                                    class="fs-5 text-black-50 fw-bold">
+                      <path
+                              d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
+                              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg></span><input class="form-control border-start-0" type="search"
+                                        placeholder="Search by Name, Username, Email Address"></div>
+                        </div><input class="form-control mb-4" type="text" disabled="" readonly=""
+                                     placeholder="Full name shows here...">
+                        <div class="input-group mb-4"><span class="bg-white input-group-text p-0"><select
+                                class="form-select border-0 text-black-50">
+                    <option value="0" selected="">GBP</option>
+                    <option value="1">EUR</option>
+                    <option value="2">USD</option>
+                  </select></span>
+                            <input class="form-control" type="text" placeholder="Amount"></div>
+                        <div class="form-floating mb-4">
+                            <textarea class="form-control" id="refTextarea-1" placeholder="References"></textarea>
+                            <label class="form-label text-black-50" for="refTextarea-1">Reference (optional)</label>
+                        </div>
+                        <button class="btn btn-dark form-control" type="button">Send</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+
+
+    </div>
+</div>
+
+<div class="modal fade" role="dialog" tabindex="-1" id="requestModal" data-bs-backdrop="static"
+     data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Request Money</h4><button class="btn-close" type="button" aria-label="Close"
+                                                                  data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-4"><label class="form-label">From:</label>
+                        <div class="input-group"><span class="bg-white input-group-text pe-none"><svg
+                                xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none"
+                                class="fs-5 text-black-50 fw-bold">
+                    <path
+                            d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg></span><input class="form-control border-start-0" type="search"
+                                      placeholder="Search by Name, Username, Email Address"></div>
+                    </div><input class="form-control mb-4" type="text" disabled="" readonly=""
+                                 placeholder="Full name shows here...">
+                    <div class="input-group mb-4"><span class="bg-white input-group-text p-0"><select
+                            class="form-select border-0 text-black-50">
+                  <option value="0" selected="">GBP</option>
+                  <option value="1">EUR</option>
+                  <option value="2">USD</option>
+                </select></span><input class="form-control" type="text" placeholder="Amount"></div>
+                    <div class="form-floating"><textarea class="form-control" id="refTextarea"
+                                                         placeholder="References"></textarea><label class="form-label text-black-50" for="refTextarea">Reference
+                        (optional)</label></div>
+                </form>
+            </div>
+            <div class="modal-footer"><button class="btn btn-light" type="button"
+                                              data-bs-dismiss="modal">Cancel</button><button class="btn btn-success" type="button">Request</button></div>
+        </div>
+    </div>
+</div>
+{%  endblock  %}
