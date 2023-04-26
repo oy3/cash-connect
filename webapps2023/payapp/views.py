@@ -377,11 +377,24 @@ def settings_page(request):
             data["currencies"] = Currency.objects.filter(is_active=True)
             data["rate_data"] = dumps(settings.CONVERSION_RATE)
             data["static_url"] = os.path.join(settings.STATIC_URL)
-            print(data)
+
             return render(request, "payapp/settings.html", data)
         else:
             redirect("/login")
 
+    except Exception as e:
+        print("{}".format(str(e)))
+
+
+def help_page(request):
+    try:
+        data = {}
+        if request.user.is_authenticated:
+            data["auth_user"] = request.user
+            data["active_page"] = 'help'
+            data["static_url"] = os.path.join(settings.STATIC_URL)
+
+            return render(request, "payapp/help.html", data)
     except Exception as e:
         print("{}".format(str(e)))
 
