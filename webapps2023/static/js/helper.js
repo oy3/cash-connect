@@ -1,16 +1,22 @@
 const hideError = () => {
     const myAlert = document.getElementById('myAlert');
-    if (myAlert ) {
+    if (myAlert) {
         myAlert.classList.remove('show');
-        myAlert.classList.add('d-none');
+        myAlert.classList.add('hide');
     }
 }
 
-const showError = (msg) => {
+const showError = (msg, error) => {
     const myAlert = document.getElementById('myAlert');
+    const mssg = document.getElementById('feedback-msg');
+
     if (myAlert) {
-        myAlert.innerHTML = msg;
-        myAlert.classList.remove('d-none');
-        myAlert.classList.add('show');
+        if (error) {
+            const toast = bootstrap.Toast.getOrCreateInstance(myAlert);
+            mssg.innerHTML = msg;
+            myAlert.classList.add('text-bg-danger');
+            myAlert.classList.remove('text-bg-success');
+            toast.show();
+        }
     }
 }

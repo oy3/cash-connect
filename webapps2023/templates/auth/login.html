@@ -37,11 +37,11 @@
                                 <fieldset>
                                     <div class="mb-3">
                                         <input class="form-control" type="email" id="email" name="email"
-                                               placeholder="Email" value="{{email}}">
+                                               placeholder="Enter Email or Username" value="{{email}}">
                                     </div>
                                     <div class="input-group mb-3">
                                         <input class="form-control border-end-0 pwd" type="password" id="password"
-                                               name="password" placeholder="Password" value="{{password}}">
+                                               name="password" placeholder="Enter Password" value="{{password}}">
                                         <span class="input-group-text bg-white togglePassword">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
                                              fill="currentColor" viewBox="0 0 16 16" class="bi bi-eye showPwd"
@@ -58,11 +58,11 @@
                                             </svg>
                                     </span>
                                     </div>
-                                    <div id="myAlert"
-                                         class="alert alert-danger alert-dismissible fade {% if error %}show {% else %}d-none{% endif %}"
-                                         role="alert">
-                                        {{ error_msg }}
-                                    </div>
+<!--                                    <div id="myAlert"-->
+<!--                                         class="alert alert-danger alert-dismissible fade {% if error %}show {% else %}d-none{% endif %}"-->
+<!--                                         role="alert">-->
+<!--                                        {{ error_msg }}-->
+<!--                                    </div>-->
                                     <div class="mb-3">
                                         <button id="loginBtn" class="btn btn-dark btn-lg d-block w-100" type="button">
                                             Login
@@ -108,10 +108,12 @@
 </div>
 
 <script src="{% static "js/passwordToggle.js" %}"></script>
+
 <script>
     const loginBtn = document.getElementById('loginBtn');
     loginBtn.addEventListener('click', function () {
         hideError();
+
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         const form = document.getElementById('loginForm');
@@ -119,9 +121,8 @@
        //frontend validation
         if (!email || !password) {
             console.log(email)
-            showError('All fields are required!');
+            showError('All fields are required!', true);
         } else {
-            console.log('here');
             form.submit();
         }
     }, false)

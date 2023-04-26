@@ -61,62 +61,62 @@
                 <div id="pills-tabContent" class="tab-content ms-0 ms-sm-3 mb-3">
                     <div id="pills-info" class="tab-pane fade show active" role="tabpanel"
                          aria-labelledby="pills-info-tab" tabindex="0">
-                        <form>
-                            <div class="mb-3">
-                                <label class="form-label" for="firstNameInput">Username</label>
-                                <input
-                                        class="form-control" type="text" id="firstNameInput" readonly=""
-                                        value="{{ auth_user.username }}" disabled="">
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col">
-                                    <label class="form-label" for="firstNameInput-1">First
-                                        name</label>
-                                    <input class="form-control text-capitalize" type="text" id="firstNameInput-1" value="{{ auth_user.first_name }}">
-                                </div>
-                                <div class="col">
-                                    <label class="form-label" for="lastNameInput-2">Last
-                                        name</label>
-                                    <input class="form-control text-capitalize" type="text" id="lastNameInput-2" value="{{ auth_user.last_name}}">
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="emailInput">Email address</label>
-                                <input class="form-control text-lowercase" type="email" id="emailInput" value="{{ auth_user.email}}">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="phoneInput">Phone number</label>
-                                <input
-                                        class="form-control" type="tel" id="phoneInput">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="addressInput">Street
-                                    Address</label>
-                                <textarea class="form-control" id="addressInput"></textarea>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col">
-                                    <label class="form-label" for="zipInput">ZIP code</label>
+                        <form  method="post"  id="updateInfoForm"  action="{% url 'payapp:update_profile' %}">
+                            {% csrf_token %}
+                            <fieldset>
+                                <div class="mb-3">
+                                    <label class="form-label" for="usernameInput">Username</label>
                                     <input
-                                            class="form-control" type="text" id="zipInput">
+                                            class="form-control" type="text" id="usernameInput" name="usernameInput" readonly=""
+                                            value="{{ auth_user.username }}" disabled="">
                                 </div>
-                                <div class="col">
-                                    <label class="form-label" for="cityInput">City</label>
-                                    <input
-                                            class="form-control" type="text" id="cityInput"></div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col">
-                                    <label class="form-label" for="stateInput">State</label>
-                                    <input
-                                            class="form-control" type="text" id="stateInput"></div>
-                                <div class="col">
-                                    <label class="form-label" for="countryInput">Country</label>
-                                    <input
-                                            class="form-control" type="text" id="countryInput">
+                                <div class="row mb-3">
+                                    <div class="col">
+                                        <label class="form-label" for="firstNameInput">First
+                                            name</label>
+                                        <input class="form-control text-capitalize" type="text" id="firstNameInput" name="firstNameInput" value="{{ auth_user.first_name }}">
+                                    </div>
+                                    <div class="col">
+                                        <label class="form-label" for="lastNameInput">Last
+                                            name</label>
+                                        <input class="form-control text-capitalize" type="text" id="lastNameInput" name="lastNameInput" value="{{ auth_user.last_name}}">
+                                    </div>
                                 </div>
-                            </div>
-                            <button class="btn btn-dark form-control" type="submit">Save changes</button>
+                                <div class="mb-3">
+                                    <label class="form-label" for="emailInput">Email address</label>
+                                    <input class="form-control text-lowercase" type="email" id="emailInput" name="emailInput" value="{{ auth_user.email}}" readonly=""  disabled="">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="phoneInput">Phone number</label>
+                                    <input class="form-control" type="tel" id="phoneInput" name="phoneInput" value="{{auth_user.phone}}">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="addressInput">Street
+                                        Address</label>
+                                    <textarea class="form-control" id="addressInput" name="addressInput">{{auth_user.address}}</textarea>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col">
+                                        <label class="form-label" for="zipInput">Zip code</label>
+                                        <input class="form-control" type="text" id="zipInput" name="zipInput" value="{{auth_user.zipcode}}">
+                                    </div>
+                                    <div class="col">
+                                        <label class="form-label" for="cityInput">City</label>
+                                        <input class="form-control" type="text" id="cityInput" name="cityInput" value="{{ auth_user.city}}"></div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col">
+                                        <label class="form-label" for="stateInput">State</label>
+                                        <input class="form-control" type="text" id="stateInput" name="stateInput" value="{{ auth_user.state}}"></div>
+                                    <div class="col">
+                                        <label class="form-label" for="countryInput">Country</label>
+                                        <select class="form-select" name="countryInput" id="countryInput">
+                                            <option value="">Select country</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button class="btn btn-dark form-control" type="button" id="updateInfoBtn">Save changes</button>
+                            </fieldset>
                         </form>
                     </div>
                     <div id="pills-pwd" class="tab-pane fade" role="tabpanel" aria-labelledby="pills-pwd-tab"
@@ -223,11 +223,6 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div id="myAlert"
-                                     class="alert alert-danger alert-dismissible fade {% if error %}show {% else %}d-none{% endif %}"
-                                     role="alert">
-                                    {{ error_msg }}
-                                </div>
                                 <button class="btn btn-dark form-control" id="changePwdBtn" type="button">Update password</button>
                             </fieldset>
                         </form>
@@ -236,13 +231,14 @@
                          tabindex="0">
                         <form>
                             <div class="row mb-3">
-                                <label class="form-label col-sm-4 col-form-label" for="currency_from">Change
-                                    currency</label>
+                                <label class="form-label col-sm-4 col-form-label" for="currency_from">
+                                   Currency</label>
                                 <div class="col-sm-8">
-                                    <select class="form-select" id="currency_from">
-                                        <optgroup label="Select currency">
+                                    <select class="form-select" id="currency_from" onchange="change()">
+                                        <optgroup label="Currencies">
+                                            <<option value="" selected="">Select currency</option>
                                             {% for currency in currencies %}
-                                            <option value="{{ currency.code}}" selected="">{{ currency.name }}</option>
+                                            <option value="{{ currency.code}}">{{ currency.name }}</option>
                                             {% endfor %}
                                         </optgroup>
                                     </select>
@@ -266,16 +262,17 @@
 <script src="{% static "js/passwordToggle.js" %}"></script>
 
 <script>
-    const rate_data = JSON.parse("{{ rate_data|escapejs }}");
-    const from = document.getElementById('currency_from').value;
-    const ulList = document.getElementById("rateGroup");
-    const static_url = "{{static_url}}"
-    let html = ""
-    ulList.innerHTML = html
+    function change() {
+        const rate_data = JSON.parse("{{ rate_data|escapejs }}");
+        const from = document.getElementById('currency_from').value;
+        const ulList = document.getElementById("rateGroup");
+        const static_url = "{{static_url}}"
+        let html = ""
+        ulList.innerHTML = html
 
-    for (let rate of rate_data) {
-        if (rate.from == from) {
-            html += `
+        for (let rate of rate_data) {
+            if (rate.from == from) {
+                html += `
                 <li class="list-group-item d-flex justify-content-between">
                    <div class="d-flex align-items-center">
                    <img class="rounded-circle me-2" src="${static_url}${rate.img_to}" height="30px" width="30px">
@@ -286,15 +283,18 @@
                     <span class="float-end">${rate.rate}</span>
                 </li>
             `
+            }
         }
+        // console.log(html);
+        ulList.innerHTML = html;
     }
-    console.log(html);
-    ulList.innerHTML = html;
 </script>
 
 <script>
-    const updateBtn = document.getElementById('changePwdBtn');
-    updateBtn.addEventListener('click', function () {
+    const updatePwdBtn = document.getElementById('changePwdBtn');
+    const updateInfoBtn = document.getElementById('updateInfoBtn');
+
+    updatePwdBtn.addEventListener('click', function () {
         hideError();
         const oldPwd = document.getElementById('oldPwdInput').value;
         const newPwd = document.getElementById('newPwdInput').value;
@@ -303,13 +303,51 @@
 
         //frontend validation
         if (!oldPwd || !newPwd || !confirmPwd) {
-            showError('All fields are required!');
+            showError('All fields are required!', true);
         } else if (newPwd !== confirmPwd){
-            showError('Passwords do not match!');
+            showError('Passwords do not match!', true);
         } else {
             form.submit();
         }
-    }, false)
+    }, false);
+
+    updateInfoBtn.addEventListener('click', function () {
+        hideError();
+        const username = document.getElementById('usernameInput').value;
+        const firstname = document.getElementById('firstNameInput').value;
+        const lastname = document.getElementById('lastNameInput').value;
+        const email = document.getElementById('emailInput').value;
+        const phone = document.getElementById('phoneInput').value;
+        const address = document.getElementById('addressInput').value;
+        const zip = document.getElementById('zipInput').value;
+        const city = document.getElementById('cityInput').value;
+        const state = document.getElementById('stateInput').value;
+        const country = document.getElementById('countryInput').value;
+        const form = document.getElementById('updateInfoForm');
+
+        //frontend validation
+        if (!username || !firstname || !lastname || !email || !phone || !address || !zip || !city || !state || !country){
+            showError('All fields are required!', true);
+        } else {
+            form.submit();
+        }
+
+    }, false);
+
+    fetch("{% url 'payapp:get_countries' %}")
+        .then(response => response.json())
+        .then(data => {
+            const countrySelect = document.getElementById("countryInput");
+            data.countries.forEach(country => {
+                const option = document.createElement("option");
+                option.value = country.code;
+                option.text = country.name;
+                if ("{{ auth_user.country }}" === country.code) {
+                    option.selected = true;
+                }
+                countrySelect.appendChild(option);
+            });
+        });
 </script>
 
 {%  endblock  %}

@@ -13,6 +13,44 @@
                     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h4>Transactions Overview</h4>
             </div>
+
+
+            <table>
+                <thead>
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>Sender</th>
+                    <th>Receiver</th>
+                    <th>Currency From</th>
+                    <th>Currency To</th>
+                    <th>Amount From</th>
+                    <th>Amount To</th>
+                    <th>Rate</th>
+                    <th>Transaction Date</th>
+                    <th>Status</th>
+                    <th>Remark</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.transaction_id }}</td>
+                    <td>{{ transaction.sent_from }}</td>
+                    <td>{{ transaction.sent_to }}</td>
+                    <td>{{ transaction.currency_from }}</td>
+                    <td>{{ transaction.currency_to }}</td>
+                    <td>{{ transaction.amount_from }}</td>
+                    <td>{{ transaction.amount_to }}</td>
+                    <td>{{ transaction.rate }}</td>
+                    <td>{{ transaction.transaction_date }}</td>
+                    <td>{{ transaction.status }}</td>
+                    <td>{{ transaction.remark }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+
             <div class="row">
                 <div class="col-md-12 col-lg-7 col-xl-7">
                     <div class="input-group mb-3"><input class="form-control" type="search"
@@ -54,196 +92,113 @@
                             <div class="table-responsive" style="height: 70vh !important;">
                                 <table class="table table-hover remove-table-hover">
                                     <tbody>
-                                    <tr>
+
+                                    {% if transactions|length > 0 %}
+
+                                        {% if pending_transactions|length > 0 %}
+                                            <tr>
+                                                <td class="border-bottom-0 m-0" style="box-shadow: none;"><span
+                                                        class="text-muted small">Pending</span></td>
+                                            </tr>
+                                            {% for transaction in pending_transactions %}
+                                                <tr>
+                                                <td>
+                                                    <div class="d-flex justify-content-between">
+                                                        <div class="d-flex align-items-center">
+                                                            {% if transaction.sent_from.username == auth_user.username %}
+                                                            <svg
+                                                                    xmlns="http://www.w3.org/2000/svg" width="1em"
+                                                                    height="1em" viewBox="0 0 20 20" fill="none"
+                                                                    class="text-danger fs-1 me-3">
+
+                                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                      d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM7 9C6.44772 9 6 9.44772 6 10C6 10.5523 6.44772 11 7 11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H7Z"
+                                                                      fill="currentColor"></path>
+                                                            </svg>
+                                                            {% else %}
+                                                            <svg
+                                                                    xmlns="http://www.w3.org/2000/svg" width="1em"
+                                                                    height="1em" viewBox="0 0 20 20" fill="none"
+                                                                    class="text-success fs-1 me-3">
+                                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                      d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 7C11 6.44772 10.5523 6 10 6C9.44772 6 9 6.44772 9 7V9H7C6.44772 9 6 9.44771 6 10C6 10.5523 6.44772 11 7 11H9V13C9 13.5523 9.44772 14 10 14C10.5523 14 11 13.5523 11 13V11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H11V7Z"
+                                                                      fill="currentColor"></path>
+                                                            </svg>
+                                                            {% endif %}
+                                                            <div class="d-grid">
+                                                                        <span class="fw-bold">
+                                                                            {% if transaction.sent_from.username == auth_user.username %} {{transaction.sent_to.username}} {% else %} {{transaction.sent_from.username}} {% endif %}
+                                                                        </span>
+                                                                <span class="text-black-50">{{transaction.transaction_date}}</span>
+                                                            </div>
+                                                        </div>
+                                                        <span class="fw-bold {% if transaction.sent_from.username == auth_user.username %}text-danger{% else %}text-success{% endif %} float-end">
+                                                                    {% if transaction.sent_from.username == auth_user.username %} - {% else %} + {% endif %}
+                                                            {% if transaction.sent_from.username == auth_user.username %} {{transaction.amount_from}} {% else %} {{transaction.amount_to}} {% endif %}
+                                                                </span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        {% endif %}
+
+                                        {% if other_transactions|length > 0 %}
+                                            <tr>
                                         <td class="border-bottom-0 m-0" style="box-shadow: none;"><span
-                                                class="text-muted small">Pendng</span></td>
+                                                class="text-muted small">Others</span></td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="d-flex align-items-center">
-                                                    <svg
-                                                            xmlns="http://www.w3.org/2000/svg" width="1em"
-                                                            height="1em" viewBox="0 0 20 20" fill="none"
-                                                            class="text-success fs-1 me-3">
+                                            {% for transaction in other_transactions %}
 
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                              d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 7C11 6.44772 10.5523 6 10 6C9.44772 6 9 6.44772 9 7V9H7C6.44772 9 6 9.44771 6 10C6 10.5523 6.44772 11 7 11H9V13C9 13.5523 9.44772 14 10 14C10.5523 14 11 13.5523 11 13V11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H11V7Z"
-                                                              fill="currentColor"></path>
-                                                    </svg>
-                                                    <div class="d-grid"><span class="fw-bold">From Ogun
-                                                                    b</span><span class="text-black-50">19:30</span>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex justify-content-between">
+                                                        <div class="d-flex align-items-center">
+                                                            {%  if transaction.status == "failed" %}
+                                                            <svg class="text-black-50 fs-1 me-3" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20" fill="none">
+                                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM8.70711 7.29289C8.31658 6.90237 7.68342 6.90237 7.29289 7.29289C6.90237 7.68342 6.90237 8.31658 7.29289 8.70711L8.58579 10L7.29289 11.2929C6.90237 11.6834 6.90237 12.3166 7.29289 12.7071C7.68342 13.0976 8.31658 13.0976 8.70711 12.7071L10 11.4142L11.2929 12.7071C11.6834 13.0976 12.3166 13.0976 12.7071 12.7071C13.0976 12.3166 13.0976 11.6834 12.7071 11.2929L11.4142 10L12.7071 8.70711C13.0976 8.31658 13.0976 7.68342 12.7071 7.29289C12.3166 6.90237 11.6834 6.90237 11.2929 7.29289L10 8.58579L8.70711 7.29289Z" fill="currentColor"></path>
+                                                            </svg>
+                                                            {% elif transaction.sent_from.username == auth_user.username %}
+                                                            <svg
+                                                                    xmlns="http://www.w3.org/2000/svg" width="1em"
+                                                                    height="1em" viewBox="0 0 20 20" fill="none"
+                                                                    class="text-danger fs-1 me-3">
+
+                                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                      d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM7 9C6.44772 9 6 9.44772 6 10C6 10.5523 6.44772 11 7 11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H7Z"
+                                                                      fill="currentColor"></path>
+                                                            </svg>
+                                                            {% else %}
+                                                            <svg
+                                                                    xmlns="http://www.w3.org/2000/svg" width="1em"
+                                                                    height="1em" viewBox="0 0 20 20" fill="none"
+                                                                    class="text-success fs-1 me-3">
+                                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                      d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 7C11 6.44772 10.5523 6 10 6C9.44772 6 9 6.44772 9 7V9H7C6.44772 9 6 9.44771 6 10C6 10.5523 6.44772 11 7 11H9V13C9 13.5523 9.44772 14 10 14C10.5523 14 11 13.5523 11 13V11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H11V7Z"
+                                                                      fill="currentColor"></path>
+                                                            </svg>
+                                                            {% endif %}
+                                                            <div class="d-grid">
+                                                                                                <span class="fw-bold">
+                                                                                                    {% if transaction.sent_from.username == auth_user.username %} {{transaction.sent_to.username}} {% else %} {{transaction.sent_from.username}} {% endif %}
+                                                                                                </span>
+                                                                <span class="text-black-50">{{transaction.transaction_date}}</span>
+                                                            </div>
+                                                        </div>
+                                                        <span class="fw-bold {% if transaction.status == 'failed' %} text-black-50{% elif transaction.sent_from.username == auth_user.username %}text-danger {% else %}text-success{% endif %} float-end">
+                                                                                       {% if transaction.sent_from.username == auth_user.username %} - {% else %} + {% endif %}
+                                                                                            {% if transaction.sent_from.username == auth_user.username %} {{transaction.amount_from}} {% else %} {{transaction.amount_to}} {% endif %}
+                                                                                        </span>
                                                     </div>
-                                                </div>
-                                                <span class="fw-bold text-success float-end">+£
-                                                            100.00</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border-bottom-0 m-0 d-flex justify-content-between"
-                                            style="box-shadow: none;"><span
-                                                class="text-muted small">Today</span><span
-                                                class="text-muted small">£ 15.30</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="d-flex align-items-center">
-                                                    <svg
-                                                            xmlns="http://www.w3.org/2000/svg" width="1em"
-                                                            height="1em" viewBox="0 0 20 20" fill="none"
-                                                            class="text-success fs-1 me-3">
+                                                </td>
+                                            </tr>
 
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                              d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 7C11 6.44772 10.5523 6 10 6C9.44772 6 9 6.44772 9 7V9H7C6.44772 9 6 9.44771 6 10C6 10.5523 6.44772 11 7 11H9V13C9 13.5523 9.44772 14 10 14C10.5523 14 11 13.5523 11 13V11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H11V7Z"
-                                                              fill="currentColor"></path>
-                                                    </svg>
-                                                    <div class="d-grid"><span class="fw-bold">From Raheem
-                                                                    Momoh</span><span class="text-black-50">15:00</span>
-                                                    </div>
-                                                </div>
-                                                <span class="fw-bold text-success float-end">+£
-                                                            10.00</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="d-flex align-items-center">
-                                                    <svg
-                                                            xmlns="http://www.w3.org/2000/svg" width="1em"
-                                                            height="1em" viewBox="0 0 20 20" fill="none"
-                                                            class="text-danger fs-1 me-3">
+                                            {% endfor %}
+                                        {% endif %}
 
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                              d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM7 9C6.44772 9 6 9.44772 6 10C6 10.5523 6.44772 11 7 11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H7Z"
-                                                              fill="currentColor"></path>
-                                                    </svg>
-                                                    <div class="d-grid"><span class="fw-bold">To Zain
-                                                                    Doe</span><span class="text-black-50">13:52</span>
-                                                    </div>
-                                                </div>
-                                                <span class="fw-bold text-danger float-end">-£ 5.30</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="d-flex align-items-center">
-                                                    <svg
-                                                            xmlns="http://www.w3.org/2000/svg" width="1em"
-                                                            height="1em" viewBox="0 0 20 20" fill="none"
-                                                            class="text-danger fs-1 me-3">
 
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                              d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM7 9C6.44772 9 6 9.44772 6 10C6 10.5523 6.44772 11 7 11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H7Z"
-                                                              fill="currentColor"></path>
-                                                    </svg>
-                                                    <div class="d-grid"><span class="fw-bold">To Lipe
-                                                                    Emma</span><span class="text-black-50">13:20</span>
-                                                    </div>
-                                                </div>
-                                                <span class="fw-bold text-danger float-end">-£ 1.00</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border-bottom-0 m-0 d-flex justify-content-between"
-                                            style="box-shadow: none;"><span
-                                                class="text-muted small">Yesterday</span><span
-                                                class="text-muted small">£ 2,000.00</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="d-flex align-items-center">
-                                                    <svg
-                                                            xmlns="http://www.w3.org/2000/svg" width="1em"
-                                                            height="1em" viewBox="0 0 20 20" fill="none"
-                                                            class="text-success fs-1 me-3">
-
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                              d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 7C11 6.44772 10.5523 6 10 6C9.44772 6 9 6.44772 9 7V9H7C6.44772 9 6 9.44771 6 10C6 10.5523 6.44772 11 7 11H9V13C9 13.5523 9.44772 14 10 14C10.5523 14 11 13.5523 11 13V11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H11V7Z"
-                                                              fill="currentColor"></path>
-                                                    </svg>
-                                                    <div class="d-grid"><span class="fw-bold">From Elia
-                                                                    Haddou</span><span
-                                                            class="text-black-50">10:06</span></div>
-                                                </div>
-                                                <span class="fw-bold text-success float-end">+£
-                                                            500.00</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="d-flex align-items-center">
-                                                    <svg
-                                                            xmlns="http://www.w3.org/2000/svg" width="1em"
-                                                            height="1em" viewBox="0 0 20 20" fill="none"
-                                                            class="text-success fs-1 me-3">
-
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                              d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 7C11 6.44772 10.5523 6 10 6C9.44772 6 9 6.44772 9 7V9H7C6.44772 9 6 9.44771 6 10C6 10.5523 6.44772 11 7 11H9V13C9 13.5523 9.44772 14 10 14C10.5523 14 11 13.5523 11 13V11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H11V7Z"
-                                                              fill="currentColor"></path>
-                                                    </svg>
-                                                    <div class="d-grid"><span class="fw-bold">From Elia
-                                                                    Haddou</span><span
-                                                            class="text-black-50">10:04</span></div>
-                                                </div>
-                                                <span class="fw-bold text-success float-end">+£
-                                                            500.00</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="d-flex align-items-center">
-                                                    <svg
-                                                            xmlns="http://www.w3.org/2000/svg" width="1em"
-                                                            height="1em" viewBox="0 0 20 20" fill="none"
-                                                            class="text-success fs-1 me-3">
-
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                              d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 7C11 6.44772 10.5523 6 10 6C9.44772 6 9 6.44772 9 7V9H7C6.44772 9 6 9.44771 6 10C6 10.5523 6.44772 11 7 11H9V13C9 13.5523 9.44772 14 10 14C10.5523 14 11 13.5523 11 13V11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H11V7Z"
-                                                              fill="currentColor"></path>
-                                                    </svg>
-                                                    <div class="d-grid"><span class="fw-bold">From Elia
-                                                                    Haddou</span><span
-                                                            class="text-black-50">10:02</span></div>
-                                                </div>
-                                                <span class="fw-bold text-success float-end">+£
-                                                            500.00</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="d-flex align-items-center">
-                                                    <svg
-                                                            xmlns="http://www.w3.org/2000/svg" width="1em"
-                                                            height="1em" viewBox="0 0 20 20" fill="none"
-                                                            class="text-success fs-1 me-3">
-
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                              d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 7C11 6.44772 10.5523 6 10 6C9.44772 6 9 6.44772 9 7V9H7C6.44772 9 6 9.44771 6 10C6 10.5523 6.44772 11 7 11H9V13C9 13.5523 9.44772 14 10 14C10.5523 14 11 13.5523 11 13V11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H11V7Z"
-                                                              fill="currentColor"></path>
-                                                    </svg>
-                                                    <div class="d-grid"><span class="fw-bold">From Elia
-                                                                    Haddou</span><span
-                                                            class="text-black-50">10:00</span></div>
-                                                </div>
-                                                <span class="fw-bold text-success float-end">+£
-                                                            500.00</span>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    {% else %}
+                                    <p class="text-danger text-center">No transactions to display</p>
+                                    {% endif %}
                                     </tbody>
                                 </table>
                             </div>
@@ -253,54 +208,54 @@
                             <div class="table-responsive" style="height: 70vh !important;">
                                 <table class="table table-hover remove-table-hover">
                                     <tbody>
-                                    <tr>
-                                        <td class="border-bottom-0 m-0 d-flex justify-content-between"
-                                            style="box-shadow: none;"><span
-                                                class="text-muted small">Today</span><span
-                                                class="text-muted small">£ 6.30</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="d-flex align-items-center">
-                                                    <svg
-                                                            xmlns="http://www.w3.org/2000/svg" width="1em"
-                                                            height="1em" viewBox="0 0 20 20" fill="none"
-                                                            class="text-danger fs-1 me-3">
+                                        {% if transactions|length > 0 %}
+                                            {% if success_transactions|length > 0 %}
+                                                {% for transaction in success_transactions %}
+                                                    {% if transaction.sent_from.username == auth_user.username %}
+                                                        <tr>
+                                            <td>
+                                                <div class="d-flex justify-content-between">
+                                                    <div class="d-flex align-items-center">
+                                                        {% if transaction.sent_from.username == auth_user.username %}
+                                                        <svg
+                                                                xmlns="http://www.w3.org/2000/svg" width="1em"
+                                                                height="1em" viewBox="0 0 20 20" fill="none"
+                                                                class="text-danger fs-1 me-3">
 
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                              d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM7 9C6.44772 9 6 9.44772 6 10C6 10.5523 6.44772 11 7 11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H7Z"
-                                                              fill="currentColor"></path>
-                                                    </svg>
-                                                    <div class="d-grid"><span class="fw-bold">To Zain
-                                                                    Doe</span><span class="text-black-50">13:52</span>
+                                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                  d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM7 9C6.44772 9 6 9.44772 6 10C6 10.5523 6.44772 11 7 11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H7Z"
+                                                                  fill="currentColor"></path>
+                                                        </svg>
+                                                        {% else %}
+                                                        <svg
+                                                                xmlns="http://www.w3.org/2000/svg" width="1em"
+                                                                height="1em" viewBox="0 0 20 20" fill="none"
+                                                                class="text-success fs-1 me-3">
+                                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                  d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 7C11 6.44772 10.5523 6 10 6C9.44772 6 9 6.44772 9 7V9H7C6.44772 9 6 9.44771 6 10C6 10.5523 6.44772 11 7 11H9V13C9 13.5523 9.44772 14 10 14C10.5523 14 11 13.5523 11 13V11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H11V7Z"
+                                                                  fill="currentColor"></path>
+                                                        </svg>
+                                                        {% endif %}
+                                                        <div class="d-grid">
+                                                                                                <span class="fw-bold">
+                                                                                                    {% if transaction.sent_from.username == auth_user.username %} {{transaction.sent_to.username}} {% else %} {{transaction.sent_from.username}} {% endif %}
+                                                                                                </span>
+                                                            <span class="text-black-50">{{transaction.transaction_date}}</span>
+                                                        </div>
                                                     </div>
+                                                    <span class="fw-bold {% if transaction.sent_from.username == auth_user.username %}text-danger{% else %}text-success{% endif %} float-end">
+                                                        {% if transaction.sent_from.username == auth_user.username %} - {% else %} + {% endif %}
+                                                                                            {% if transaction.sent_from.username == auth_user.username %} {{transaction.amount_from}} {% else %} {{transaction.amount_to}} {% endif %}
+                                                                                        </span>
                                                 </div>
-                                                <span class="fw-bold text-danger float-end">-£ 5.30</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="d-flex align-items-center">
-                                                    <svg
-                                                            xmlns="http://www.w3.org/2000/svg" width="1em"
-                                                            height="1em" viewBox="0 0 20 20" fill="none"
-                                                            class="text-danger fs-1 me-3">
-
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                              d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM7 9C6.44772 9 6 9.44772 6 10C6 10.5523 6.44772 11 7 11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H7Z"
-                                                              fill="currentColor"></path>
-                                                    </svg>
-                                                    <div class="d-grid"><span class="fw-bold">To Lipe
-                                                                    Emma</span><span class="text-black-50">13:20</span>
-                                                    </div>
-                                                </div>
-                                                <span class="fw-bold text-danger float-end">-£ 1.00</span>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                            </td>
+                                        </tr>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% else %}
+                                            <p class="text-danger text-center">No expenses transactions to display</p>
+                                        {% endif %}
                                     </tbody>
                                 </table>
                             </div>
@@ -310,128 +265,54 @@
                             <div class="table-responsive" style="height: 70vh !important;">
                                 <table class="table table-hover remove-table-hover">
                                     <tbody>
-                                    <tr>
-                                        <td class="border-bottom-0 m-0 d-flex justify-content-between"
-                                            style="box-shadow: none;"><span
-                                                class="text-muted small">Today</span><span
-                                                class="text-muted small">£ 10.00</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="d-flex align-items-center">
-                                                    <svg
-                                                            xmlns="http://www.w3.org/2000/svg" width="1em"
-                                                            height="1em" viewBox="0 0 20 20" fill="none"
-                                                            class="text-success fs-1 me-3">
+                                    {% if transactions|length > 0 %}
+                                        {% if success_transactions|length > 0 %}
+                                            {% for transaction in success_transactions %}
+                                                {% if transaction.sent_to.username == auth_user.username %}
+                                                    <tr>
+                                                    <td>
+                                                        <div class="d-flex justify-content-between">
+                                                            <div class="d-flex align-items-center">
+                                                                {% if transaction.sent_from.username == auth_user.username %}
+                                                                <svg
+                                                                        xmlns="http://www.w3.org/2000/svg" width="1em"
+                                                                        height="1em" viewBox="0 0 20 20" fill="none"
+                                                                        class="text-danger fs-1 me-3">
 
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                              d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 7C11 6.44772 10.5523 6 10 6C9.44772 6 9 6.44772 9 7V9H7C6.44772 9 6 9.44771 6 10C6 10.5523 6.44772 11 7 11H9V13C9 13.5523 9.44772 14 10 14C10.5523 14 11 13.5523 11 13V11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H11V7Z"
-                                                              fill="currentColor"></path>
-                                                    </svg>
-                                                    <div class="d-grid"><span class="fw-bold">From Raheem
-                                                                    Momoh</span><span class="text-black-50">15:00</span>
-                                                    </div>
-                                                </div>
-                                                <span class="fw-bold text-success float-end">+£
-                                                            10.00</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border-bottom-0 m-0 d-flex justify-content-between"
-                                            style="box-shadow: none;"><span
-                                                class="text-muted small">Yesterday</span><span
-                                                class="text-muted small">£ 2,000.00</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="d-flex align-items-center">
-                                                    <svg
-                                                            xmlns="http://www.w3.org/2000/svg" width="1em"
-                                                            height="1em" viewBox="0 0 20 20" fill="none"
-                                                            class="text-success fs-1 me-3">
-
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                              d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 7C11 6.44772 10.5523 6 10 6C9.44772 6 9 6.44772 9 7V9H7C6.44772 9 6 9.44771 6 10C6 10.5523 6.44772 11 7 11H9V13C9 13.5523 9.44772 14 10 14C10.5523 14 11 13.5523 11 13V11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H11V7Z"
-                                                              fill="currentColor"></path>
-                                                    </svg>
-                                                    <div class="d-grid"><span class="fw-bold">From Elia
-                                                                    Haddou</span><span
-                                                            class="text-black-50">10:06</span></div>
-                                                </div>
-                                                <span class="fw-bold text-success float-end">+£
-                                                            500.00</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="d-flex align-items-center">
-                                                    <svg
-                                                            xmlns="http://www.w3.org/2000/svg" width="1em"
-                                                            height="1em" viewBox="0 0 20 20" fill="none"
-                                                            class="text-success fs-1 me-3">
-
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                              d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 7C11 6.44772 10.5523 6 10 6C9.44772 6 9 6.44772 9 7V9H7C6.44772 9 6 9.44771 6 10C6 10.5523 6.44772 11 7 11H9V13C9 13.5523 9.44772 14 10 14C10.5523 14 11 13.5523 11 13V11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H11V7Z"
-                                                              fill="currentColor"></path>
-                                                    </svg>
-                                                    <div class="d-grid"><span class="fw-bold">From Elia
-                                                                    Haddou</span><span
-                                                            class="text-black-50">10:04</span></div>
-                                                </div>
-                                                <span class="fw-bold text-success float-end">+£
-                                                            500.00</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="d-flex align-items-center">
-                                                    <svg
-                                                            xmlns="http://www.w3.org/2000/svg" width="1em"
-                                                            height="1em" viewBox="0 0 20 20" fill="none"
-                                                            class="text-success fs-1 me-3">
-
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                              d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 7C11 6.44772 10.5523 6 10 6C9.44772 6 9 6.44772 9 7V9H7C6.44772 9 6 9.44771 6 10C6 10.5523 6.44772 11 7 11H9V13C9 13.5523 9.44772 14 10 14C10.5523 14 11 13.5523 11 13V11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H11V7Z"
-                                                              fill="currentColor"></path>
-                                                    </svg>
-                                                    <div class="d-grid"><span class="fw-bold">From Elia
-                                                                    Haddou</span><span
-                                                            class="text-black-50">10:02</span></div>
-                                                </div>
-                                                <span class="fw-bold text-success float-end">+£
-                                                            500.00</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="d-flex align-items-center">
-                                                    <svg
-                                                            xmlns="http://www.w3.org/2000/svg" width="1em"
-                                                            height="1em" viewBox="0 0 20 20" fill="none"
-                                                            class="text-success fs-1 me-3">
-
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                              d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 7C11 6.44772 10.5523 6 10 6C9.44772 6 9 6.44772 9 7V9H7C6.44772 9 6 9.44771 6 10C6 10.5523 6.44772 11 7 11H9V13C9 13.5523 9.44772 14 10 14C10.5523 14 11 13.5523 11 13V11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H11V7Z"
-                                                              fill="currentColor"></path>
-                                                    </svg>
-                                                    <div class="d-grid"><span class="fw-bold">From Elia
-                                                                    Haddou</span><span
-                                                            class="text-black-50">10:00</span></div>
-                                                </div>
-                                                <span class="fw-bold text-success float-end">+£
-                                                            500.00</span>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                          d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM7 9C6.44772 9 6 9.44772 6 10C6 10.5523 6.44772 11 7 11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H7Z"
+                                                                          fill="currentColor"></path>
+                                                                </svg>
+                                                                {% else %}
+                                                                <svg
+                                                                        xmlns="http://www.w3.org/2000/svg" width="1em"
+                                                                        height="1em" viewBox="0 0 20 20" fill="none"
+                                                                        class="text-success fs-1 me-3">
+                                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                          d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 7C11 6.44772 10.5523 6 10 6C9.44772 6 9 6.44772 9 7V9H7C6.44772 9 6 9.44771 6 10C6 10.5523 6.44772 11 7 11H9V13C9 13.5523 9.44772 14 10 14C10.5523 14 11 13.5523 11 13V11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H11V7Z"
+                                                                          fill="currentColor"></path>
+                                                                </svg>
+                                                                {% endif %}
+                                                                <div class="d-grid">
+                                                                                                            <span class="fw-bold">
+                                                                                                                {% if transaction.sent_from.username == auth_user.username %} {{transaction.sent_to.username}} {% else %} {{transaction.sent_from.username}} {% endif %}
+                                                                                                            </span>
+                                                                    <span class="text-black-50">{{transaction.transaction_date}}</span>
+                                                                </div>
+                                                            </div>
+                                                            <span class="fw-bold {% if transaction.sent_from.username == auth_user.username %}text-danger{% else %}text-success{% endif %} float-end">
+                                                                {% if transaction.sent_from.username == auth_user.username %} - {% else %} + {% endif %}
+                                                                                                        {% if transaction.sent_from.username == auth_user.username %} {{transaction.amount_from}} {% else %} {{transaction.amount_to}} {% endif %}
+                                                                                                    </span>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% else %}
+                                        <p class="text-danger text-center">No income transactions to display</p>
+                                    {% endif %}
                                     </tbody>
                                 </table>
                             </div>
@@ -443,9 +324,9 @@
                     <div class="bg-dark text-white">
                         <div class="p-3">
                             <p class="fw-lighter" style="font-size: 12px;">Balance</p>
-                            <h2 class="fw-bold">GBP 1,100.00</h2><span class="fw-lighter"
-                                                                       style="font-size: 12px;">Available</span>
-                            <p class="fs-5 fw-bold">GBP 1,000.00</p>
+                            <h2 class="fw-bold">{{currency_code.upper}} {{ wallet.balance }}</h2>
+                            <span class="fw-lighter" style="font-size: 12px;">Available</span>
+                            <p class="fs-5 fw-bold">{{currency_code.upper}} {{ wallet.balance }}</p>
                             <hr>
                             <div class="table-responsive text-center">
                                 <table class="table table-dark table-borderless">
@@ -478,8 +359,8 @@
                                     </thead>
                                     <tbody>
                                     <tr>
-                                        <td class="border-end">GBP 2,110.00</td>
-                                        <td>GBP 5.30</td>
+                                        <td class="border-end">{{currency_code.upper}} 0.00</td>
+                                        <td>{{currency_code.upper}} 0.00</td>
                                     </tr>
                                     </tbody>
                                 </table>

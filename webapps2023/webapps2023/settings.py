@@ -134,3 +134,61 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+CONVERSION_RATE = [
+    {"from": "gbp",
+     "to": "gbp",
+     "rate": 1.0,
+     "img_from": "img/uk.png",
+     "img_to": "img/uk.png"
+     },
+    {"from": "gbp",
+     "to": "usd",
+     "rate": 1.24,
+     "img_from": "img/uk.png",
+     "img_to": "img/usa.svg"
+     },
+    {"from": "gbp",
+     "to": "eur",
+     "rate": 1.12,
+     "img_from": "img/uk.png",
+     "img_to": "img/euro.png"
+     },
+    {"from": "eur",
+     "to": "eur",
+     "rate": 1.0,
+     "img_from": "img/euro.png",
+     "img_to": "img/euro.png"
+     },
+    {"from": "eur",
+     "to": "gbp",
+     "rate": 0.89,
+     "img_from": "img/euro.png",
+     "img_to": "img/uk.png"
+     },
+    {"from": "eur",
+     "to": "usd",
+     "rate": 1.11,
+     "img_from": "img/euro.png",
+     "img_to": "img/usa.svg"
+     },
+    {"from": "usd",
+     "to": "usd",
+     "rate": 1.0,
+     "img_from": "img/usa.svg",
+     "img_to": "img/usa.svg"
+     },
+    {"from": "usd",
+     "to": "gbp",
+     "rate": 0.80,
+     "img_from": "img/usa.svg",
+     "img_to": "img/uk.png"
+     },
+    {"from": "usd",
+     "to": "eur",
+     "rate": 0.90,
+     "img_from": "img/usa.svg",
+     "img_to": "img/euro.png"
+     }
+]

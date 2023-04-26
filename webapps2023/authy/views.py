@@ -27,9 +27,9 @@ def login_user(request):
             "password": password
         }
 
-        print(data)
+        # print(data)
         user = authenticate(username=email, password=password)
-        print(user)
+        # print(user)
 
         if user is not None and user.is_active:
             login(request, user)
@@ -39,9 +39,15 @@ def login_user(request):
             elif request.user.is_staff:
                 return redirect('/admin')
             else:
+                data['error'] = True
+                data['alert'] = False
+                data['error_msg'] = "You are successfully logged in"
                 return redirect('/app')
+                # return render(request, "payapp/dashboard.html", data)
+
         else:
             data['error'] = True
+            data['alert'] = True
             data['error_msg'] = "Invalid Username and Password"
 
         return render(request, "auth/login.html", data)
@@ -51,6 +57,7 @@ def login_user(request):
             "password": ""
         }
         data['error'] = True
+        data['alert'] = True
         data['error_msg'] = "Something went wrong {}".format(str(e))
         return render(request, "auth/login.html", data)
 
@@ -66,21 +73,23 @@ def change_password(request):
 
         if not user.check_password(old_password):
             data['error'] = True
+            data['alert'] = True
             data['error_msg'] = "The old password you entered is incorrect."
-            messages.error(request, 'The old password you entered is incorrect.')
-            return redirect('/app/settings')
+            return render(request, "payapp/settings.html", data)
 
         if len(new_password) < 8:
             data['error'] = True
+            data['alert'] = True
             data['error_msg'] = "The new password must be at least 8 characters long."
-            messages.error(request, 'The new password must be at least 8 characters long.')
-            return redirect('/app/settings')
+            return render(request, "payapp/settings.html", data)
 
         user.set_password(new_password)
         user.save()
 
-        messages.success(request, 'Your password has been updated.')
-        return redirect('/auth/login')
+        data['error'] = True
+        data['alert'] = False
+        data['error_msg'] = "Your password has been updated."
+        return render(request, "auth/login.html", data)
 
     return render(request, "payapp/settings.html")
 
@@ -89,4 +98,9 @@ def logout_user(request):
     data = {}
     logout(request)
 
+    data['error'] = True
+    data['alert'] = False
+    data['error_msg'] = "You're logged out successfully"
+    # redirect("/auth/login")
     return render(request, "auth/login.html", data)
+
