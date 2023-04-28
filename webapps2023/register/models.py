@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.utils.timezone import now
+
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -16,12 +18,13 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', True)
         return self.create_user(email, password, **extra_fields)
 
+
 class CustomUser(AbstractBaseUser):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=30, unique=True)
-    date_of_registration = models.DateTimeField(auto_now_add=True)
+    date_of_registration = models.DateTimeField(default=now)
     phone_number = models.CharField(max_length=15)
     street_address = models.CharField(max_length=255)
     zip_code = models.CharField(max_length=10)

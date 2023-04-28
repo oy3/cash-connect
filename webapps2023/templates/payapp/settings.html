@@ -61,7 +61,7 @@
                 <div id="pills-tabContent" class="tab-content ms-0 ms-sm-3 mb-3">
                     <div id="pills-info" class="tab-pane fade show active" role="tabpanel"
                          aria-labelledby="pills-info-tab" tabindex="0">
-                        <form  method="post"  id="updateInfoForm"  action="{% url 'payapp:update_profile' %}">
+                        <form  method="get"  id="updateInfoForm"  action="{% url 'payapp:update_profile' %}">
                             {% csrf_token %}
                             <fieldset>
                                 <div class="mb-3">
@@ -88,17 +88,17 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label" for="phoneInput">Phone number</label>
-                                    <input class="form-control" type="tel" id="phoneInput" name="phoneInput" value="{{auth_user.phone}}">
+                                    <input class="form-control" type="tel" id="phoneInput" name="phoneInput" value="{{ auth_user.phone_number }}">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label" for="addressInput">Street
                                         Address</label>
-                                    <textarea class="form-control" id="addressInput" name="addressInput">{{auth_user.address}}</textarea>
+                                    <textarea class="form-control" id="addressInput" name="addressInput">{{auth_user.street_address}}</textarea>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col">
                                         <label class="form-label" for="zipInput">Zip code</label>
-                                        <input class="form-control" type="text" id="zipInput" name="zipInput" value="{{auth_user.zipcode}}">
+                                        <input class="form-control" type="text" id="zipInput" name="zipInput" value="{{ auth_user.zip_code}}">
                                     </div>
                                     <div class="col">
                                         <label class="form-label" for="cityInput">City</label>
@@ -326,7 +326,7 @@
         const form = document.getElementById('updateInfoForm');
 
         //frontend validation
-        if (!username || !firstname || !lastname || !email || !phone || !address || !zip || !city || !state || !country){
+        if (!username || !firstname || !lastname || !email ){
             showError('All fields are required!', true);
         } else {
             form.submit();

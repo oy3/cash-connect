@@ -18,7 +18,7 @@
             <div class="card-body">
               <h5 class="card-title">Sending funds</h5>
               <ul>
-                <li>From the dashboard page, click on <strong>Transfer</strong>.</li>
+                <li>From the dashboard page, click on <strong><span style="color: rgb(11, 111, 183);">Transfer</span></strong>.</li>
                 <li>Type the username or email of the beneficiary in the search field and click the search icon button.</li>
                 <li>In the amount field, enter the amount you wish to send to the beneficiary.</li>
                 <li>(Optional) If you want to add a short note to the beneficiary, type it in the reference field.</li>
@@ -33,7 +33,7 @@
             <div class="card-body">
               <h5 class="card-title">Requesting funds</h5>
               <ul>
-                <li>From the dashboard page, click on <strong>Transfer</strong>.</li>
+                <li>From the dashboard page, click on <strong><span style="color: rgb(11, 111, 183);">Transfer</span></strong>.</li>
                 <li>Click on the &quot;Request Payment&quot; button, which will open a modal.</li>
                 <li>In the search field, enter the username or email of the sender and click the search button.</li>
                 <li>In the amount field, enter the amount you want to request.</li>
@@ -45,11 +45,15 @@
           </div>
         </div>
         <div class="col">
-          <div class="card h-100"><img class="card-img-top" src="{% static "img/transfer.png" %}"/>
+          <div class="card h-100"><img class="card-img-top" src="{% static "img/acc_request.png" %}"/>
             <div class="card-body">
               <h5 class="card-title">Accept or Decline fund request</h5>
               <ul>
-                <li>From the dashboard page, click on Transfer.</li>
+                <li>From the dashboard page, click on <strong><span style="color: rgb(11, 111, 183);">Transactions</span></strong>.</li>
+                <li>In the &quot;All&quot; transactions tab, you will see a pending row in the table.</li>
+                <li>To accept the money request from another user, click on the &quot;<strong><span style="color: rgb(255, 15, 0);">Accept</span></strong>&quot; button.</li>
+                <li>To reject the money request, click on the &quot;<strong><span style="color: rgb(50, 191, 56);">Reject</span></strong>&quot; button.</li>
+                <li>If you want to cancel a request that you made to another user, click on the &quot;<strong><span style="color: rgb(160, 160, 160);">Cancel</span></strong>&quot; button.</li>
               </ul>
             </div>
           </div>
@@ -59,7 +63,7 @@
             <div class="card-body">
               <h5 class="card-title">View transaction history</h5>
               <ul>
-                <li>From the dashboard page, click on <strong>Transactions</strong>.</li>
+                <li>From the dashboard page, click on <strong><span style="color: rgb(11, 111, 183);">Transactions</span></strong>.</li>
                 <li>You will see a list of all your transaction history including successful, failed, and pending transactions, ordered by date.</li>
                 <li>If you want to search for a specific transaction, use the search field.</li>
                 <li>On the right side of the page, you will find the Account Overview, which displays your account balance, available balance, income, and expenses.</li>
@@ -73,7 +77,7 @@
             <div class="card-body">
               <h5 class="card-title">Updating user profile</h5>
               <ul>
-                <li>From the dashboard page, click on <strong>Settings</strong>.</li>
+                <li>From the dashboard page, click on <strong><span style="color: rgb(11, 111, 183);">Settings</span></strong>.</li>
                 <li>Click on the &quot;Personal Info&quot; tab.</li>
                 <li>Type in the details that you want to update.</li>
                 <li>Click on the &quot;Save Changes&quot; button to update your profile details.</li>
@@ -87,7 +91,7 @@
             <div class="card-body">
               <h5 class="card-title">Changing password</h5>
               <ul>
-                <li>From the dashboard page, click on <strong>Settings</strong>.</li>
+                <li>From the dashboard page, click on <strong><span style="color: rgb(11, 111, 183);">Settings</span></strong>.</li>
                 <li>Click on the &quot;Password and Security&quot; tab.</li>
                 <li>Enter your old password.</li>
                 <li>Enter your new password of choice. (The new password must be at least 8 characters long.)</li>
@@ -103,7 +107,7 @@
             <div class="card-body">
               <h5 class="card-title">Checking rates</h5>
               <ul>
-                <li>From the dashboard page, click on <strong>Settings</strong>.</li>
+                <li>From the dashboard page, click on <strong><span style="color: rgb(11, 111, 183);">Settings</span></strong>.</li>
                 <li>Click on the &quot;General&quot; tab.</li>
                 <li>Select the currency of your choice from the list of available currencies.</li>
                 <li>A table will display below, showing the currency name, currency code, and the rate compared to other currencies.</li>

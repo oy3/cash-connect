@@ -12,6 +12,8 @@ from django.forms.models import model_to_dict
 import requests
 from datetime import datetime, timedelta
 from django.db import transaction as atomic_transaction
+from django.db.models import Sum
+from django.core import serializers
 
 import os
 
@@ -290,7 +292,6 @@ def dashboard_page(request):
             data["pending_transactions"] = Transaction.objects.filter(Q(sent_from=request.user) | Q(sent_to=request.user), status='pending').order_by('-transaction_date')
             data["success_transactions"] = Transaction.objects.filter(Q(sent_from=request.user) | Q(sent_to=request.user), status='completed').order_by('-transaction_date')
             data["other_transactions"] = Transaction.objects.filter(Q(sent_from=request.user) | Q(sent_to=request.user)).exclude(status='pending').order_by('-transaction_date')
-
             return render(request, "payapp/dashboard.html", data)
         else:
             redirect("/login")
@@ -344,12 +345,15 @@ def transactions_page(request):
         data = {}
         if request.user.is_authenticated:
             data["auth_user"] = request.user
-            data["wallet"] = UserWallet.objects.filter(user=request.user).first()
-            if str(data["wallet"].currency) == "US Dollars":
+            wallet = UserWallet.objects.filter(user=request.user).first()
+
+            data["wallet"] = wallet
+
+            if str(wallet.currency) == "US Dollars":
                 data["currency_code"] = "usd"
-            elif str(data["wallet"].currency) == "GB Pounds":
+            elif str(wallet.currency) == "GB Pounds":
                 data["currency_code"] = "gbp"
-            elif str(data["wallet"].currency) == "Euros":
+            elif str(wallet.currency) == "Euros":
                 data["currency_code"] = "eur"
             else:
                 data["currency_code"] = "n/a"
@@ -358,6 +362,26 @@ def transactions_page(request):
             data["pending_transactions"] = Transaction.objects.filter(Q(sent_from=request.user) | Q(sent_to=request.user), status='pending').order_by('-transaction_date')
             data["success_transactions"] = Transaction.objects.filter(Q(sent_from=request.user) | Q(sent_to=request.user), status='completed').order_by('-transaction_date')
             data["other_transactions"] = Transaction.objects.filter(Q(sent_from=request.user) | Q(sent_to=request.user)).exclude(status='pending').order_by('-transaction_date')
+
+            pending_from = Transaction.objects.filter(sent_from=request.user, status='pending').aggregate(Sum('amount_from'))
+            pending_to = Transaction.objects.filter(sent_to=request.user, status='pending').aggregate(Sum('amount_to'))
+
+            # if pending_to['amount_to__sum'] is None:
+            #     pending_to_sum = 0
+            # else:
+            #     pending_to_sum = pending_to['amount_to__sum']
+            #
+            # if pending_from['amount_from__sum'] is None:
+            #     pending_from_sum = 0
+            # else:
+            #     pending_from_sum = pending_to['amount_to__sum']
+            #
+            # data["args1"] = float(wallet.balance) - float(pending_from_sum)
+            # data["args2"] = float(wallet.balance) + float(pending_to_sum)
+
+            # data["incoming_balance"] = (data["args1"] + data["args2"]) - float(wallet.balance)
+
+            # print(data["incoming_balance"])
 
             data["active_page"] = 'transactions'
             return render(request, "payapp/transactions.html", data)
@@ -408,8 +432,6 @@ def conversion(request, currency_one, currency_two, amount):
         currency_one = Currency.objects.filter(code=currency_one.lower()).first()
         currency_two = Currency.objects.filter(code=currency_two.lower()).first()
         amount = float(amount) if amount else 1.0
-        converted_rate = None
-
         if currency_one is None or currency_two is None:
             data['msg'] = "We don't handle this currency"
             return JsonResponse(data, status=400)
@@ -417,26 +439,22 @@ def conversion(request, currency_one, currency_two, amount):
             data['msg'] = "Invalid amount"
             return JsonResponse(data, status=400)
         else:
-            converted_rate = [rate for rate in settings.CONVERSION_RATE if
-                              rate["from"] == currency_one.code and rate["to"] == currency_two.code]
+            converted_rate = [rate for rate in settings.CONVERSION_RATE if rate["from"] == currency_one.code and rate["to"] == currency_two.code]
             if len(converted_rate) <= 0:
-                data['msg'] = "we currently do not convert {} to {}".format(currency_one.upper(), currency_two.upper())
+                data['msg'] = "We currently do not convert {} to {}".format(currency_one.upper(), currency_two.upper())
                 return JsonResponse(data, status=400)
             else:
                 converted_rate = converted_rate[0]
                 converted_amount = converted_rate["rate"] * amount
                 conversion_data = dict()
-
                 conversion_data["currency_from"] = converted_rate["from"]
                 conversion_data["currency_to"] = converted_rate["to"]
                 conversion_data["amount"] = converted_amount
                 conversion_data["rate"] = converted_rate["rate"]
-
                 data["status"] = True
                 data["msg"] = "Converted successfully"
                 data["data"] = conversion_data
-
-        return JsonResponse(data, status=200)
+                return JsonResponse(data, status=200)
     except Exception as e:
         print(e)
         data["msg"] = data["msg"] + "{}".format(str(e))
@@ -447,17 +465,17 @@ def conversion(request, currency_one, currency_two, amount):
 def update_profile(request):
     try:
         data = {}
-        if request.method == 'POST':
+        if request.method == 'GET':
             user = request.user
-            user.first_name = request.POST.get('firstNameInput').capitalize()
-            user.last_name = request.POST.get('lastNameInput').capitalize()
+            user.first_name = request.GET.get('firstNameInput').capitalize()
+            user.last_name = request.GET.get('lastNameInput').capitalize()
             # user.email = request.POST.get('emailInput').lower()
-            user.phone = request.POST.get('phoneInput')
-            user.address = request.POST.get('addressInput').capitalize()
-            user.zipcode = request.POST.get('zipInput').upper()
-            user.city = request.POST.get('cityInput').capitalize()
-            user.state = request.POST.get('stateInput').capitalize()
-            user.country = request.POST.get('countryInput')
+            user.phone_number = request.GET.get('phoneInput')
+            user.street_address = request.GET.get('addressInput').capitalize()
+            user.zip_code = request.GET.get('zipInput').upper()
+            user.city = request.GET.get('cityInput').capitalize()
+            user.state = request.GET.get('stateInput').capitalize()
+            user.country = request.GET.get('countryInput')
 
             # Check for email
             if '@' not in user.email:
@@ -493,25 +511,19 @@ def search_user(request):
         "msg": "Something went wrong"
     }
 
-    print(request.method)
-
     try:
         if request.method == 'POST' and request.user.is_authenticated:
-            print(request.POST)
             search = request.POST.get('search_user')
             qs = User.objects.filter(Q(email=search) | Q(username=search))
 
             if search is None or search == '' or not search:
                 data["msg"] = "No search input provided"
-                print(data)
                 return JsonResponse(data, status=400)
             elif not qs.exists():
                 data["msg"] = "User not found"
-                print(data)
                 return JsonResponse(data, status=400)
             elif qs.exists() and qs.first().username == request.user.username:
                 data["msg"] = "User not found"
-                print(data)
                 return JsonResponse(data, status=400)
             else:
                 data["msg"] = True
@@ -558,7 +570,6 @@ def create_transaction(request):
                 data['alert'] = True
                 data['error_msg'] = "Insufficient funds"
                 return render(request, "payapp/transfer.html", data)
-                # return redirect("/app/transfer")
             else:
                 with atomic_transaction.atomic():
                     response = requests.get("http://{}/conversion/{}/{}/{}".format(request.get_host(), currency_from.code, currency_to.code, amount_from))
@@ -585,10 +596,78 @@ def create_transaction(request):
                     transaction.save()
 
                     return redirect('/app/transfer', status='success', msg='Money sent successfully')
-                    # return render(request, "payapp/transfer.html", data)
         else:
             redirect("/login")
 
+    except Exception as e:
+        print("{}".format(str(e)))
+
+
+@csrf_exempt
+@login_required
+def cancel_transactions(request):
+    try:
+        if request.method == 'POST' and request.user.is_authenticated:
+            transaction_id = request.POST.get('transaction_id')
+            transaction = Transaction.objects.get(id=transaction_id)
+            transaction.status = 'failed'
+            transaction.save()
+
+            return JsonResponse({'success': True})
+
+        else:
+            return JsonResponse({'success': False})
+
+    except Exception as e:
+        print("{}".format(str(e)))
+        return JsonResponse({'success': False})
+
+
+@login_required
+def cancel_fund_request(request, transaction_id):
+    try:
+        if request.user.is_authenticated:
+            transaction = Transaction.objects.get(pk=transaction_id)
+            transaction.status = 'failed'
+            transaction.save()
+            return redirect('/app/transactions')
+        else:
+            return redirect('/app/transactions')
+    except Exception as e:
+        print("{}".format(str(e)))
+
+
+@login_required
+@atomic_transaction.atomic
+def accept_fund_request(request, transaction_id, sender_id, receiver_id, amount_from, amount_to):
+    try:
+        data = {}
+        if request.user.is_authenticated:
+            sender = User.objects.get(id=int(sender_id))
+            receiver = User.objects.get(id=int(receiver_id))
+            senderWallet = UserWallet.objects.get(user=sender)
+            receiverWallet = UserWallet.objects.get(user=receiver)
+            if sender and receiver:
+                if float(senderWallet.balance) > float(amount_from):
+                    with atomic_transaction.atomic():
+                        senderWallet.withdraw(float(amount_from))
+                        receiverWallet.deposit(float(amount_to))
+                        transaction = Transaction.objects.get(pk=int(transaction_id))
+                        transaction.status = 'completed'
+                        transaction.save()
+                        return redirect('/app/transactions')
+                else:
+                    data['error'] = True
+                    data['alert'] = True
+                    data['error_msg'] = "Insufficient funds"
+                    return render(request, "payapp/transactions.html", data)
+            else:
+                data['error'] = True
+                data['alert'] = True
+                data['error_msg'] = "Beneficiary not found"
+                return render(request, "payapp/transactions.html", data)
+        else:
+            return redirect('/app/transactions')
     except Exception as e:
         print("{}".format(str(e)))
 
@@ -613,14 +692,12 @@ def request_money(request):
                 data['alert'] = True
                 data['error_msg'] = "Sender not found"
 
-                # data['display_modal'] = True
                 return render(request, "payapp/transfer.html", data)
             elif not amount_to:
                 data['error'] = True
                 data['alert'] = True
                 data['error_msg'] = "Amount can not be empty"
 
-                # data['display_modal'] = True
                 return render(request, "payapp/transfer.html", data)
             else:
                 with atomic_transaction.atomic():
@@ -629,9 +706,6 @@ def request_money(request):
                     data = response_data.get("data", dict())
                     amount_from = data.get("amount", 0)
                     rate = data.get("rate", 0)
-
-                    # user_wallet_sender_qs.first().withdraw(amount_from)
-                    # user_wallet_receiver_qs.first().deposit(amount_to)
 
                     transaction = Transaction.objects.create(
                         sent_from=sender_user.first(),
@@ -646,12 +720,50 @@ def request_money(request):
                     transaction.status = "pending"
                     transaction.save()
 
-                    # data['display_modal'] = True
                     return redirect('/app/transfer', status='success', msg='Money request sent successfully')
-                    # return render(request, "payapp/request.html", data)
         else:
             redirect("/login")
 
     except Exception as e:
         print("{}".format(str(e)))
 
+
+@csrf_exempt
+@login_required
+def search_transactions(request):
+    data = {
+        "status": False,
+        "msg": "Something went wrong"
+    }
+
+    try:
+        if request.method == 'POST' and request.user.is_authenticated:
+            search_query = request.POST.get('search_query')
+
+            if search_query is None or search_query == '' or not search_query:
+                data["msg"] = "No search input provided"
+                return JsonResponse(data, status=400)
+
+            search_users = User.objects.filter(username=search_query).first()
+
+            if not search_users:
+                data["msg"] = "Searched user not found"
+                return JsonResponse(data, status=400)
+
+            other_transactions = Transaction.objects.filter(Q(sent_from=search_users) | Q(sent_to=search_users))
+
+            if not other_transactions.exists():
+                data["msg"] = "No transactions found for this use"
+                return JsonResponse(data, status=400)
+            else:
+                data["msg"] = True
+                data["msg"] = "Transaction exists"
+                data["data"] = other_transactions
+                return JsonResponse(data, status=200)
+        else:
+            redirect("/login")
+
+    except Exception as e:
+        print(e)
+        data["msg"] = data["msg"] + "{}".format(str(e))
+        return JsonResponse(data, status=500)

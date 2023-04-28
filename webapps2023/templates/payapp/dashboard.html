@@ -27,11 +27,13 @@
                             <p class="fw-lighter" style="font-size: 12px;">Balance</p>
                             <h2 class="fw-bold">{{currency_code.upper}} {{ wallet.balance }}</h2>
                             <span class="fw-lighter" style="font-size: 12px;">Account holder</span>
-                            <p class="fs-5 fw-normal">{{ auth_user.first_name }} {{ auth_user.last_name}}<span
-                                    class="bg-white p-1 rounded text-secondary ms-2 border-secondary border"
-                                    style="font-size: 12px;">{{ auth_user.username }}</span></p>
-                            <span class="fw-lighter" style="font-size: 12px;">Available</span>
-                            <p class="fs-5 fw-bold">GBP {{ wallet.balance }}</p>
+                            <p class="fs-5 fw-normal">{{ auth_user.first_name }} {{ auth_user.last_name}}
+<!--                                <span-->
+<!--                                    class="bg-white p-1 rounded text-secondary ms-2 border-secondary border"-->
+<!--                                    style="font-size: 12px;">{{ auth_user.username }}</span>-->
+                            </p>
+                            <span class="fw-lighter" style="font-size: 12px;">Username</span>
+                            <p class="fs-5 fw-bold">{{ auth_user.username }}</p>
                             <hr>
                             <div class="table-responsive text-center">
                                 <table class="table table-borderless">
@@ -86,7 +88,7 @@
                                 <span class="text-black-50 small">View all</span>
                             </a>
                         </div>
-                        <div class="tab-content ms-0 ms-sm-3">
+                        <div class="tab-content ms-0 ms-sm-3 cc-h-45">
                             <div class="table-responsive">
                                 <table id="dashboard_table" class="table table-hover remove-table-hover">
                                     <tbody>
@@ -94,8 +96,8 @@
 
                                     {% if pending_transactions|length > 0 %}
                                     <tr>
-                                        <td class="border-bottom-0 m-0" style="box-shadow: none;"><span
-                                                class="text-muted small">Pending</span></td>
+                                        <th class="border-bottom-0 m-0" style="box-shadow: none;"><span
+                                                class="text-muted small">Pending</span></th>
                                     </tr>
                                     {% for transaction in pending_transactions %}
                                     <tr>
@@ -124,14 +126,18 @@
                                                     {% endif %}
                                                     <div class="d-grid">
                                                                         <span class="fw-bold">
-                                                                            {% if transaction.sent_from.username == auth_user.username %} {{transaction.sent_to.username}} {% else %} {{transaction.sent_from.username}} {% endif %}
+                                                                            {% if transaction.sent_from.username == auth_user.username %} Request from {{transaction.sent_to.username}} {% else %} Request to {{transaction.sent_from.username}} {% endif %}
                                                                         </span>
                                                         <span class="text-black-50">{{transaction.transaction_date}}</span>
                                                     </div>
                                                 </div>
                                                 <span class="fw-bold {% if transaction.sent_from.username == auth_user.username %}text-danger{% else %}text-success{% endif %} float-end">
+
                                                                     {% if transaction.sent_from.username == auth_user.username %} - {% else %} + {% endif %}
-                                                            {% if transaction.sent_from.username == auth_user.username %} {{transaction.amount_from}} {% else %} {{transaction.amount_to}} {% endif %}
+
+<!--                                                      {% if transaction.sent_from.username == auth_user.username %}{{transaction.currency_from.symbol}}{% else %}{{transaction.currency_to.symbol}}{% endif %}-->
+
+                                                            {% if transaction.sent_from.username == auth_user.username %} {{transaction.currency_from.symbol}}{{transaction.amount_from}} {% else %} {{transaction.currency_to.symbol}}{{transaction.amount_to}} {% endif %}
                                                                 </span>
                                             </div>
                                         </td>
@@ -141,8 +147,8 @@
 
                                     {% if other_transactions|length > 0 %}
                                     <tr>
-                                        <td class="border-bottom-0 m-0" style="box-shadow: none;"><span
-                                                class="text-muted small">Others</span></td>
+                                        <th class="border-bottom-0 m-0" style="box-shadow: none;"><span
+                                                class="text-muted small">Others</span></th>
                                     </tr>
                                     {% for transaction in other_transactions %}
 
@@ -176,15 +182,16 @@
                                                     {% endif %}
                                                     <div class="d-grid">
                                                                                                 <span class="fw-bold">
-                                                                                                    {% if transaction.sent_from.username == auth_user.username %} {{transaction.sent_to.username}} {% else %} {{transaction.sent_from.username}} {% endif %}
+                                                                                                    {% if transaction.sent_from.username == auth_user.username %} Payment to {{transaction.sent_to.username}} {% else %}  Payment from {{transaction.sent_from.username}} {% endif %}
                                                                                                 </span>
                                                         <span class="text-black-50">{{transaction.transaction_date}}</span>
                                                     </div>
                                                 </div>
                                                 <span class="fw-bold {% if transaction.status == 'failed' %} text-black-50{% elif transaction.sent_from.username == auth_user.username %}text-danger {% else %}text-success{% endif %} float-end">
-                                                                                       {% if transaction.sent_from.username == auth_user.username %} - {% else %} + {% endif %}
-                                                                                            {% if transaction.sent_from.username == auth_user.username %} {{transaction.amount_from}} {% else %} {{transaction.amount_to}} {% endif %}
-                                                                                        </span>
+                                                    {% if transaction.sent_from.username == auth_user.username %} - {% else %} + {% endif %}
+<!--                                                    {% if transaction.sent_from.username == auth_user.username %}{{transaction.currency_from.symbol}}{% else %}{{transaction.currency_to.symbol}}{% endif %}-->
+                                                    {% if transaction.sent_from.username == auth_user.username %}{{transaction.currency_from.symbol}}{{transaction.amount_from}} {% else %}{{transaction.currency_to.symbol}}{{transaction.amount_to}} {% endif %}
+                                                </span>
                                             </div>
                                         </td>
                                     </tr>
@@ -204,42 +211,29 @@
                     <div class="d-flex justify-content-center">
                         <div class="bg-dark text-white w-100 py-5 px-3 px-sm-0">
                             <h5 class="ps-3">Recent beneficiaries</h5>
-                            <div class="d-flex justify-content-evenly mt-4 w-100">
-                                <div class="text-center">
-                                    <div class="d-flex justify-content-center"><span
-                                            class="beneficiaries-icon bg-white rounded-circle d-flex align-items-center justify-content-center"><i
-                                            class="icon-user fs-2 text-dark"></i></span></div>
-                                    <span
-                                            class="small text-break">Zain Doe</span>
-                                </div>
-                                <div class="text-center">
-                                    <div class="d-flex justify-content-center"><span
-                                            class="beneficiaries-icon bg-white rounded-circle d-flex align-items-center justify-content-center"><i
-                                            class="icon-user fs-2 text-dark"></i></span></div>
-                                    <span
-                                            class="small">Lipe Emma</span>
-                                </div>
-                                <div class="text-center">
-                                    <div class="d-flex justify-content-center"><span
-                                            class="beneficiaries-icon bg-white rounded-circle d-flex align-items-center justify-content-center"><i
-                                            class="icon-user fs-2 text-dark"></i></span></div>
-                                    <span
-                                            class="small">Ogun B</span>
-                                </div>
-                                <div class="text-center">
-                                    <div class="d-flex justify-content-center"><span
-                                            class="beneficiaries-icon bg-white rounded-circle d-flex align-items-center justify-content-center"><i
-                                            class="icon-user-female fs-2 text-dark"></i></span></div>
-                                    <span
-                                            class="small">Elia Haddou</span>
-                                </div>
-                                <div class="text-center">
-                                    <div class="d-flex justify-content-center"><span
-                                            class="beneficiaries-icon bg-white rounded-circle d-flex align-items-center justify-content-center"><i
-                                            class="icon-user fs-2 text-dark"></i></span></div>
-                                    <span
-                                            class="small">Sam Reid</span>
-                                </div>
+                            <div class="d-flex justify-content-start mt-4 mx-4 w-100">
+                                {% if success_transactions|length > 0 %}
+                                    {% for transaction in success_transactions %}
+                                        {% if transaction.sent_from.username == auth_user.username %}
+                                            {% ifchanged transaction.sent_to.username %}
+                                                <div class="text-center me-4">
+                                                    <div class="d-flex justify-content-center">
+                                                        <span class="beneficiaries-icon bg-white rounded-circle d-flex align-items-center justify-content-center">
+                                                            <i class="icon-user fs-2 text-dark"></i>
+                                                        </span>
+                                                    </div>
+                                                    <span class="small text-break">{{transaction.sent_to.first_name}} {{transaction.sent_to.last_name}}</span>
+                                                </div>
+                                            {% endifchanged %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                <div class="text-center">No recent beneficiaries found.</div>
+                                {% endif %}
+
+
+
+
                             </div>
                         </div>
                     </div>

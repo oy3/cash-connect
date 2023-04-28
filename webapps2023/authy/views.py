@@ -27,13 +27,10 @@ def login_user(request):
             "password": password
         }
 
-        # print(data)
         user = authenticate(username=email, password=password)
-        # print(user)
 
         if user is not None and user.is_active:
             login(request, user)
-
             if request.user.is_staff and request.user.is_superuser:
                 return redirect('/admin')
             elif request.user.is_staff:
@@ -43,13 +40,10 @@ def login_user(request):
                 data['alert'] = False
                 data['error_msg'] = "You are successfully logged in"
                 return redirect('/app')
-                # return render(request, "payapp/dashboard.html", data)
-
         else:
             data['error'] = True
             data['alert'] = True
             data['error_msg'] = "Invalid Username and Password"
-
         return render(request, "auth/login.html", data)
     except Exception as e:
         data = {
@@ -101,6 +95,6 @@ def logout_user(request):
     data['error'] = True
     data['alert'] = False
     data['error_msg'] = "You're logged out successfully"
-    # redirect("/auth/login")
+
     return render(request, "auth/login.html", data)
 

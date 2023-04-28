@@ -17,71 +17,80 @@
         </button>
         <ul class="dropdown-menu dropdown-menu-end bg-light shadow-lg" style="width: 300px;">
             <div class="d-flex justify-content-between mx-3 mb-3">
-                <span class="text-muted">Notifications</span>
-                <!--           <a href="#" class="small text-decoration-none">View more</a> -->
+                <span class="text-muted small fw-bold">Notifications</span>
+                           <a href="{% url 'payapp:transactions_page' %}" class="small text-decoration-none">view all</a>
             </div>
+
+            {% if transactions|length > 0 %}
+            {% for transaction in transactions|dictsortreversed:"transaction_date"|slice:":4" %}
             <li>
                 <a class="dropdown-item py-0" href="#">
                     <div class="d-flex align-items-center">
-                        <span class="me-2 text-danger">●</span>
+                        <span class="me-2 text-danger" style="font-size: x-small">●</span>
                         <div class="d-grid">
-                            <span class="text-wrap" style="font-size:small">Recieved payment of <b>£50.70</b> from <b>Elia277</b></span>
-                            <span class="text-muted" style="font-size:x-small">09:20AM</span>
+                            <span class="text-wrap" style="font-size:small">
+
+                                {% if transaction.status == "pending" %}
+                                Request
+                                {% else %}
+                                    {% if transaction.sent_from.username == auth_user.username %}
+                                        Sent
+                                    {% else %}
+                                        Received
+                                    {% endif %}
+                                {% endif %}
+
+                                 payment of
+                                <b>
+
+<!--                                {% if transaction.sent_from.username == auth_user.username %}{{transaction.currency_from.symbol}}{% else %}{{transaction.currency_to.symbol}}{% endif %}-->
+                                {% if transaction.sent_from.username == auth_user.username %}{{transaction.currency_from.symbol}}{{transaction.amount_from}}{% else %}{{transaction.currency_to.symbol}}{{transaction.amount_to}}{% endif %}
+
+                                </b>
+
+                                {% if transaction.status == "pending" %}
+                                    {% if transaction.sent_from.username == auth_user.username %} from {% else %} to {% endif %}
+                                {% else %}
+                                    {% if transaction.sent_from.username == auth_user.username %} to {% else %} from {% endif %}
+                                {% endif %}
+
+                                <b>{{ transaction.sent_from.username }}</b>
+                            </span>
+                            <span class="text-muted" style="font-size:x-small">{{ transaction.transaction_date|date:"D d M h:i a" }}</span>
                         </div>
                     </div>
                 </a>
             </li>
+
             <li>
                 <hr class="dropdown-divider">
             </li>
-            <li>
-                <a class="dropdown-item py-0" href="#">
-                    <div class="d-flex align-items-center">
-                        <span class="me-2 text-danger">●</span>
-                        <div class="d-grid">
-                            <span class="text-wrap" style="font-size:small">Sent payment of <b>£400.00</b> to <b>Ojo123</b></span>
-                            <span class="text-muted" style="font-size:x-small">07:00AM</span>
-                        </div>
-                    </div>
-                </a>
-            </li>
-            <li>
-                <hr class="dropdown-divider">
-            </li>
-            <li>
-                <a class="dropdown-item py-0" href="#">
-                    <div class="d-flex align-items-center">
-                        <span class="me-2 text-danger">●</span>
-                        <div class="d-grid">
-                            <span class="text-wrap" style="font-size:small">Recieved payment of <b>£250.00</b> from <b>Lipe419</b></span>
-                            <span class="text-muted" style="font-size:x-small">02:30AM</span>
-                        </div>
-                    </div>
-                </a>
-            </li>
+            {% endfor %}
+            {% else %}
+            <span class="text-danger">No new notifications</span>
+            {% endif %}
+
         </ul>
     </div>
     <ul class="dropdown-menu dropdown-menu-end" style="width: 300px !important;">
-        <li><a class="dropdown-item py-0" href="#">
-            <div class="d-flex align-items-center"><span class="me-2 text-danger">●</span>
-                <div class="d-grid"><span class="text-wrap">Recieved payment of £50.70 from Elia277</span><span
-                        class="small text-black-50">09:20AM</span></div>
-            </div>
-        </a></li>
-        <li></li>
-        <li><a class="dropdown-item py-0" href="#">
-            <div class="d-flex align-items-center"><span class="me-2 text-danger">●</span>
-                <div class="d-grid"><span class="text-wrap">Recieved payment of £50.70 from Elia277</span><span
-                        class="small text-black-50">09:20AM</span></div>
-            </div>
-        </a></li>
-        <li></li>
-        <li><a class="dropdown-item py-0" href="#">
-            <div class="d-flex align-items-center"><span class="me-2 text-danger">●</span>
-                <div class="d-grid"><span class="text-wrap">Recieved payment of £50.70 from Elia277</span><span
-                        class="small text-black-50">09:20AM</span></div>
-            </div>
-        </a></li>
+        {% if transactions|length > 0 %}
+            {% for transaction in transactions %}
+                <li>
+                    <a class="dropdown-item py-0" href="#">
+                        <div class="d-flex align-items-center">
+                            <span class="me-2 text-danger">●</span>
+                            <div class="d-grid">
+                                <span class="text-wrap">RReceived payment of £{{ transaction.amount }} from {{ transaction.sent_from }}</span>
+                                <span class="small text-black-50">{{ transaction.transaction_date|date:"h:iA" }}</span>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <li></li>
+            {% endfor %}
+        {% else %}
+            <span class="text-danger">No new notifications</span>
+        {% endif %}
     </ul>
     <button class="btn navbar-toggler position-absolute d-md-none collapsed" type="button"
             data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"

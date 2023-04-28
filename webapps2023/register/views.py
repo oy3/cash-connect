@@ -44,8 +44,6 @@ def register_user(request):
             data['alert'] = True
             data['error_msg'] = "All fields are required"
 
-            # sleep(0.5)
-            # data['error'] = False
             return render(request, "auth/register.html", data)
 
         # Check for email
@@ -54,8 +52,6 @@ def register_user(request):
             data['alert'] = True
             data['error_msg'] = "Invalid email address"
 
-            # time.sleep(1)
-            # data['error'] = False
             return render(request, "auth/register.html", data)
 
         # Check for password and confirm password
@@ -64,8 +60,6 @@ def register_user(request):
             data['alert'] = True
             data['error_msg'] = "Passwords do not match"
 
-            # time.sleep(5)
-            # data['error'] = False
             return render(request, "auth/register.html", data)
 
         # Check if user already exists with the same email
@@ -75,8 +69,6 @@ def register_user(request):
             data['alert'] = True
             data['error_msg'] = "Email already exist"
 
-            # time.sleep(5)
-            # data['error'] = False
             return render(request, "auth/register.html", data)
 
         # Check if support currency
@@ -117,8 +109,8 @@ def register_user(request):
         data['alert'] = False
         data['error_msg'] = "Account registration successful"
 
-        redirect("/app")
-        return render(request, "payapp/dashboard.html", data)
+        return redirect("/app")
+        # return render(request, "payapp/dashboard.html", data)
     except Exception as e:
         data = {
             "fname": "",
